@@ -2,6 +2,7 @@
 #include <fstream> //libreria para los archivos txt
 using namespace std;
 void comentariosUsuario();
+void verResenias();
 void resenia();
 
 int main()
@@ -24,6 +25,7 @@ do {
         break;
     case 2:
         cout<<"Resenias de usuarios\n";
+        verResenias();
         break;
     case 3:
         cout<<"calificar servicio\n";
@@ -58,7 +60,7 @@ if (opcion == 1) {
         // Guardar el comentario en un archivo
         ofstream archivo_comentarios("comentarios.txt", ios::app); // Abre el archivo en modo append
         if (archivo_comentarios.is_open()) {
-            archivo_comentarios << "Nombre: " << nombreCliente << "\nComentario: " << comentario << "\n\n";
+            archivo_comentarios << "Nombre del cliente: " << nombreCliente << "\nComentario: " << comentario << "\n\n";
             archivo_comentarios.close();
         } else {
             cout << "No se pudo abrir el archivo para guardar el comentario.\n";
@@ -66,7 +68,20 @@ if (opcion == 1) {
     }
 }
 
+void verResenias(){
+    ifstream archivo_comentarios("comentarios.txt");
+    string linea;
 
+    if (archivo_comentarios.is_open()) {
+        while (getline(archivo_comentarios, linea)) {
+            cout << linea << endl;
+        }
+        archivo_comentarios.close();
+    } else {
+        cout << "No se pudo abrir el archivo de reseñas." << endl;
+    }
+
+}
 
 void resenia(){
 int  calificacion, estrellas;
