@@ -1,147 +1,73 @@
 #include <iostream>
 using namespace std;
-void mesas();
+void comentariosUsuario();
+void resenia();
 
 int main()
 {
-    int opcion;
-
+    int opcion,repiteMenu,calificarServicio;
+    
+do {
     cout << "Seleccione un dia para ver la disponibilidad de las mesas\n";
-    cout << "1.Lunes \n";
-    cout << "2.Martes \n";
-    cout << "3.Miercoles \n";
-    cout << "4.Jueves \n";
-    cout << "5.Viernes \n";
-    cout << "6.Sabado \n";
-    cout << "7.Domingo \n";
+    cout << "1.Dejar un comentario sobre nustros servicios: \n";
+    cout << "2.Ver resenias:\n";
+    cout << "3.Caficar servicion: \n";
     cin >> opcion;
     switch (opcion)
     {
+    
     case 1:
-        cout<<"Disponibilidad del dia lunes\n";
-        cout<<"Elija una mesa que este disponible\n";
-        mesas();
+        cout<<"Esta en el apartado de comentarios.\n";
+        comentariosUsuario();
         break;
     case 2:
-        cout<<"Disponibilidad del dia martes\n";
-        cout<<"Elija una mesa que este disponible\n";
-        mesas();
+        cout<<"Resenias de usuarios\n";
         break;
     case 3:
-        cout<<"Disponibilidad del dia miercoles\n";
-        cout<<"Elija una mesa que este disponible\n";
-        mesas();
+        cout<<"calificar servicio\n";
+        resenia();
         break;
-    case 4:
-        cout<<"Disponibilidad del dia jueves\n";
-        cout<<"Elija una mesa que este disponible\n";
-        mesas();
-        break;
-    case 5:
-        cout<<"Disponibilidad del dia viernes\n";
-        cout<<"Elija una mesa que este disponible\n";
-        mesas();
-        break;
-    case 6:
-        cout<<"Disponibilidad del dia sabado\n";
-        cout<<"Elija una mesa que este disponible\n";
-        mesas();
-        break;
-    case 7:
-        cout<<"Disponibilidad del dia domingo\n";
-        cout<<"Elija una mesa que este disponible\n";
-        mesas();
-        break;
-
     default:cout<<"<elija una opcion correcta";
         break;
     }
-
+        cout << "Desea hacer otro movimiento? (1-Si, 2-No): \n";
+        cin >> repiteMenu;
+} while (repiteMenu == 1);
+cout<<"Muchas gracias por preferirnos :)";
     return 0;
 }
 
-void mesas(){
-    int eleccion,cantidadPErsonas,confirmacion;
-    float hora;
-    string fecha,correo;
-    cout<<"Mesa 1 - disponible\n";
-    cout<<"Mesa 2 - disponible\n";
-    cout<<"Mesa 3 - disponible\n";
-    cin>>eleccion;
-    switch (eleccion)
-    {
-    case 1:
-    while (true)
-    {
-        cout<<"Escriba la fecha de reservacion (dd/mm/anio) \n";
-        cin>>fecha;
-        cout<<"Escriba la hora de reservacion en formato 24 horas\n";
-        cin>>hora;
-        cout<<"Escriba la cantidad de personas que estara en la mesa (maximo 4)\n";
-        cin>>cantidadPErsonas;
-        if (cantidadPErsonas > 4)
-        {
-            cout<<"La cantidad maxima es de 4 personas";
-        }else{
-            break;
-        }
-    }      
-        cout<<"Escriba su correo electronico para que le enviemos la confirmacion de reserva: ";
-        cin>>correo;
-        cout<<"Esta seguro de confirmar la reservacion 1-si, 2-no\n";
-        cin>>confirmacion;
-        cout<<"Se realizo su confirmacion con exito, se le envio el comprobante a su correo.";
-        break;
 
-    case 2:
-    while (true)
-    {
-        cout<<"Escriba la fecha de reservacion (dd/mm/anio) \n";
-        cin>>fecha;
-        cout<<"Escriba la hora de reservacion en formato 24 horas\n";
-        cin>>hora;
-        cout<<"Escriba la cantidad de personas que estara en la mesa (maximo 4)\n";
-        cin>>cantidadPErsonas;
-        if (cantidadPErsonas > 4)
-        {
-            cout<<"La cantidad maxima es de 4 personas";
-        }else{
-            break;
-        }
-    }            
-        cout<<"Escriba su correo electronico para que le enviemos la confirmacion de reserva: ";
-        cin>>correo;
-        cout<<"Esta seguro de confirmar la reservacion 1-si, 2-no\n";
-        cin>>confirmacion;
-        cout<<"Se realizo su confirmacion con exito, se le envio el comprobante a su correo.";
-        break;
+void comentariosUsuario(){
+string comentario,nombreCliente;
+int opcion;
+cout<<"Ingrese su nombre por favor: ";
+cin>>nombreCliente;
+cout<<"Esrcribra su comentario por favor y presione ENTER cuando termine: ";
+cin>>comentario;
+cout<<"Esta seguro de dejar este comentario? (1=si/2=no)\n";
+cin>>opcion;
+if (opcion == 1)
+{
+    cout<<"Muchas gracias por brindarnos sus comentarios, los tomaremos en cuenta para mejorar la experencia.\n";
+}
+}
 
-    case 3:
-    while (true)
+void resenia(){
+int  calificacion, estrellas;
+string nombre;
+cout << "ingrese su nombre\n";
+cin >> nombre;
+cout << "califique nuestros servicios del 1 al 5, siendo 5 la maxima nota: \n";
+cin >> estrellas;
+
+if (estrellas >= 1 && estrellas <= 5)
+{
+    for (int i = 0; i < estrellas; i++)
     {
-        cout<<"Escriba la fecha de reservacion (dd/mm/anio) \n";
-        cin>>fecha;
-        cout<<"Escriba la hora de reservacion en formato 24 horas\n";
-        cin>>hora;
-        cout<<"Escriba la cantidad de personas que estara en la mesa (maximo 4)\n";
-        cin>>cantidadPErsonas;
-        if (cantidadPErsonas > 4)
-        {
-            cout<<"La cantidad maxima es de 4 personas\n";
-        }else{
-            break;
-        }
+        cout << "*";
     }
-        cout<<"Escriba su correo electronico para que le enviemos la confirmacion de reserva: \n";
-        cin>>correo;
-        cout<<"Esta seguro de confirmar la reservacion 1-si, 2-no\n";
-        cin>>confirmacion;
-        cout<<"Se realizo su confirmacion con exito, se le envio el comprobante a su correo.";
-    
-        
-        
-        break;    
-    default: cout<<"Elija una mesa por favor";
-        break;
-    }
+}
+else
+    cout << "ponga un numero dentro del rango por favor\n";
 }
