@@ -10,10 +10,11 @@ int main()
     int opcion,repiteMenu;
     
 do {
-    cout << "Seleccione un dia para ver la disponibilidad de las mesas\n";
+    cout << "Seleccione una de las opciones\n";
     cout << "1.Dejar un comentario sobre nustros servicios: \n";
     cout << "2.Ver resenias:\n";
     cout << "3.Caficar servicion: \n";
+    cout << "su opcion es: ";
     cin  >> opcion;
     system("cls");
     switch (opcion)
@@ -22,6 +23,7 @@ do {
     case 1:
         cout<<"Esta en el apartado de comentarios.\n";
         comentariosUsuario();
+        
         break;
     case 2:
         cout<<"Resenias de usuarios\n";
@@ -30,12 +32,14 @@ do {
     case 3:
         cout<<"calificar servicio\n";
         resenia();
+        
         break;
-    default:cout<<"<elija una opcion correcta";
+    default:cout<<"Elija una opcion correcta \n";
         break;
     }
-        cout << "Desea hacer otro movimiento? (1-Si, 2-No): \n";
+        cout << "Desea hacer otro movimiento? (1-Si, 0-No): \n";
         cin >> repiteMenu;
+        system("cls");
 } while (repiteMenu == 1);
 cout<<"Muchas gracias por preferirnos :)";
     return 0;
@@ -53,15 +57,17 @@ cout<<"Esrcribra su comentario por favor y presione ENTER cuando termine: \n";
 getline(cin, comentario);//guardara toda la reseña del usuario.
 cout<<"Esta seguro de dejar este comentario? (1=si/2=no)\n";
 cin>>opcion;
+system("cls");
 
 if (opcion == 1) {
         cout << "Muchas gracias por brindarnos sus comentarios, los tomaremos en cuenta para mejorar la experiencia.\n";
 
         // Guardar el comentario en un archivo
-        ofstream archivo_comentarios("comentarios.txt", ios::app); // Abre el archivo en modo append
-        if (archivo_comentarios.is_open()) {
+        ofstream archivo_comentarios("comentarios.txt", ios::app); // Crea el archivo a nombre de comentarios.txt
+        if (archivo_comentarios.is_open())//abre el archivo y comienza a capturar los datos
+        {
             archivo_comentarios << "Nombre del cliente: " << nombreCliente << "\nComentario: " << comentario << "\n\n";
-            archivo_comentarios.close();
+            archivo_comentarios.close();//cierra el archivo y deja de capturar los datos
         } else {
             cout << "No se pudo abrir el archivo para guardar el comentario.\n";
         }
@@ -78,7 +84,7 @@ void verResenias(){
         }
         archivo_comentarios.close();
     } else {
-        cout << "No se pudo abrir el archivo de reseñas." << endl;
+        cout << "No se pudo abrir el archivo de resenias." << endl;
     }
 
 }
@@ -97,9 +103,11 @@ if (estrellas >= 1 && estrellas <= 5)
     for (int i = 0; i < estrellas; i++)
     {
         cout << "*";
+        cout<<"\n";
     }
     calificacion = estrellas;
 }
 else
     cout << "ponga un numero dentro del rango por favor\n";
+    
 }
