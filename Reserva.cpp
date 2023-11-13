@@ -21,16 +21,16 @@ do {
     {
     
     case 1:
-        cout<<"Esta en el apartado de comentarios.\n";
+        cout<<"--------Esta en el apartado de comentarios--------\n";
         comentariosUsuario();
         
         break;
     case 2:
-        cout<<"Resenias de usuarios\n";
+        cout<<"--------Resenias de usuarios--------\n";
         verResenias();
         break;
     case 3:
-        cout<<"calificar servicio\n";
+        cout<<"--------calificar servicio--------\n";
         resenia();
         
         break;
@@ -47,12 +47,14 @@ cout<<"Muchas gracias por preferirnos :)";
 
 
 void comentariosUsuario(){
-string comentario,nombreCliente;
+string comentario,nombreCliente,apellido_cliente;
 int opcion;
 
-cout<<"Ingrese su nombre por favor: ";
-cin>>nombreCliente;
 cin.ignore();//ignorara el bufer antes de usar el getline
+cout<<"Ingrese su nombres por favor: \n";
+getline(cin, nombreCliente);
+cout<<"Ingrese su apellidos por favor: \n";
+getline(cin, apellido_cliente);
 cout<<"Esrcribra su comentario por favor y presione ENTER cuando termine: \n";
 getline(cin, comentario);//guardara toda la reseña del usuario.
 cout<<"Esta seguro de dejar este comentario? (1=si/2=no)\n";
@@ -66,7 +68,7 @@ if (opcion == 1) {
         ofstream archivo_comentarios("comentarios.txt", ios::app); // Crea el archivo a nombre de comentarios.txt
         if (archivo_comentarios.is_open())//abre el archivo y comienza a capturar los datos
         {
-            archivo_comentarios << "Nombre del cliente: " << nombreCliente << "\nComentario: " << comentario << "\n\n";
+            archivo_comentarios << "Nombre del cliente: " << nombreCliente << "\nApellido del cliente: "<<apellido_cliente <<"\nComentario: " << comentario << "\n\n";
             archivo_comentarios.close();//cierra el archivo y deja de capturar los datos
         } else {
             cout << "No se pudo abrir el archivo para guardar el comentario.\n";
@@ -89,25 +91,34 @@ void verResenias(){
 
 }
 
-void resenia(){
-int  calificacion, estrellas;
-string nombre;
-
-cout << "ingrese su nombre\n";
-cin >> nombre;
-cout << "califique nuestros servicios del 1 al 5, siendo 5 la maxima nota: \n";
-cin >> estrellas;
-
-if (estrellas >= 1 && estrellas <= 5)
+void resenia()
 {
-    for (int i = 0; i < estrellas; i++)
+    int calificacion, estrellas;
+    string nombre;
+
+    cout << "ingrese su nombre\n";
+    cin >> nombre;
+    do
     {
-        cout << "*";
-        cout<<"\n";
-    }
-    calificacion = estrellas;
-}
-else
-    cout << "ponga un numero dentro del rango por favor\n";
-    
+        cout << "califique nuestros servicios del 1 al 5, siendo 5 la maxima nota: \n";
+        cin >> estrellas;
+        system("cls");
+
+        if (estrellas >= 1 && estrellas <= 5)
+        {
+            //imprimira el nombre del cliente y el numero de estrellas que puso el cliente
+            cout<<"Nombre del cliente: "<<nombre<<"\n";
+            cout<<"Numero de estrellas que puso el cliente: ";
+            
+            for (int i = 0; i < estrellas; i++)
+            {
+                cout << "*";  
+                
+            }
+            cout << "\n";
+            
+        }
+        else
+            cout << "ponga un numero dentro del rango por favor\n";
+    } while (estrellas < 1 || estrellas > 5);//se ocupara un do while por si el usuario ingresa un numero fuera del rango, el programa le volvera a solicitar el numero
 }
