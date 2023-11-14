@@ -97,9 +97,13 @@ void resenia()
     string nombre;
 
     cout << "Ingrese su nombre\n";
-    cin  >> nombre;
-    do
+    cin >> nombre;
+
+    ofstream archivo("registro_de_estrellas.txt", ios::app); // crea el archivo
+    if (archivo.is_open())//abre el archivo y comienza a capturar los datos
     {
+        do
+        {
         cout << "Califique nuestros servicios del 1 al 5, siendo 5 la maxima nota: \n";
         cout << "Su calificacion es: ";
         cin >> estrellas;
@@ -107,19 +111,32 @@ void resenia()
 
         if (estrellas >= 1 && estrellas <= 5)
         {
-            //imprimira el nombre del cliente y el numero de estrellas que puso el cliente
-            cout<<"Nombre del cliente: "<<nombre<<"\n";
-            cout<<"Numero de estrellas que puso el cliente: ";
             
+            cout << "Nombre del cliente: " << nombre << "\n";
+            cout << "Numero de estrellas que puso el cliente: ";
+
             for (int i = 0; i < estrellas; i++)
             {
-                cout << "*";  
-                
+                cout << "*";
             }
             cout << "\n";
-            
+
+            //escribe la información en el archivo
+            archivo << "Nombre del cliente: " << nombre << "\n";
+            archivo << "Numero de estrellas que puso el cliente: ";
+            for (int i = 0; i < estrellas; i++)
+            {
+                archivo << "*";
+            }
+            archivo << "\n";
+            archivo << "\n";
         }
         else
             cout << "Ponga un numero dentro del rango por favor\n";
-    } while (estrellas < 1 || estrellas > 5);//se ocupara un do while por si el usuario ingresa un numero fuera del rango
-}                                            // el programa le volvera a solicitar el numero
+    } while (estrellas < 1 || estrellas > 5);//se ocupara un do while por si el usuario ingresa un numero fuera del rango que  el programa le volvera a solicitar el numero
+
+    archivo.close(); // cierra el archivo
+        }else {
+            cout << "No se pudo abrir el archivo para guardar el comentario.\n";
+        }    
+}
