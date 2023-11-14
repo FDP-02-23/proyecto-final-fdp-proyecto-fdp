@@ -11,10 +11,10 @@ int main()
     
 do {
     cout << "Seleccione una de las opciones\n";
-    cout << "1.Dejar un comentario sobre nustros servicios: \n";
-    cout << "2.Ver resenias:\n";
-    cout << "3.Caficar servicion: \n";
-    cout << "su opcion es: ";
+    cout << "1.Dejar un comentario sobre nustros servicios \n";
+    cout << "2.Ver resenias de otros clientes\n";
+    cout << "3.Calificar nuestros servicio \n";
+    cout << "Su opcion es: ";
     cin  >> opcion;
     system("cls");
     switch (opcion)
@@ -30,14 +30,14 @@ do {
         verResenias();
         break;
     case 3:
-        cout<<"--------calificar servicio--------\n";
+        cout<<"--------calificar nuestros servicios--------\n";
         resenia();
         
         break;
     default:cout<<"Elija una opcion correcta \n";
         break;
     }
-        cout << "Desea hacer otro movimiento? (1-Si, 0-No): \n";
+        cout << "Desea regresar al menu otra vez? (1-Si, 0-No): \n";
         cin >> repiteMenu;
         system("cls");
 } while (repiteMenu == 1);
@@ -52,23 +52,23 @@ int opcion;
 
 cin.ignore();//ignorara el bufer antes de usar el getline
 cout<<"Ingrese su nombres por favor: \n";
-getline(cin, nombreCliente);
+getline(cin, nombreCliente);//guardara los nombres de los usuarios
 cout<<"Ingrese su apellidos por favor: \n";
-getline(cin, apellido_cliente);
+getline(cin, apellido_cliente);//guardara los dos apellidos del usuario 
 cout<<"Esrcribra su comentario por favor y presione ENTER cuando termine: \n";
 getline(cin, comentario);//guardara toda la reseña del usuario.
-cout<<"Esta seguro de dejar este comentario? (1=si/2=no)\n";
+cout<<"Esta seguro de dejar este comentario? (1=si/0=no)\n";
 cin>>opcion;
 system("cls");
 
 if (opcion == 1) {
-        cout << "Muchas gracias por brindarnos sus comentarios, los tomaremos en cuenta para mejorar la experiencia.\n";
+        cout << "Muchas gracias por brindarnos sus comentarios. Los tomaremos en cuenta para mejorar la experiencia.\n";
 
         // Guardar el comentario en un archivo
         ofstream archivo_comentarios("comentarios.txt", ios::app); // Crea el archivo a nombre de comentarios.txt
         if (archivo_comentarios.is_open())//abre el archivo y comienza a capturar los datos
         {
-            archivo_comentarios << "Nombre del cliente: " << nombreCliente << "\nApellido del cliente: "<<apellido_cliente <<"\nComentario: " << comentario << "\n\n";
+            archivo_comentarios << "Nombres del cliente: " << nombreCliente << "\nApellidos del cliente: "<<apellido_cliente <<"\nComentario: " << comentario << "\n";
             archivo_comentarios.close();//cierra el archivo y deja de capturar los datos
         } else {
             cout << "No se pudo abrir el archivo para guardar el comentario.\n";
@@ -96,11 +96,12 @@ void resenia()
     int calificacion, estrellas;
     string nombre;
 
-    cout << "ingrese su nombre\n";
-    cin >> nombre;
+    cout << "Ingrese su nombre\n";
+    cin  >> nombre;
     do
     {
-        cout << "califique nuestros servicios del 1 al 5, siendo 5 la maxima nota: \n";
+        cout << "Califique nuestros servicios del 1 al 5, siendo 5 la maxima nota: \n";
+        cout << "Su calificacion es: ";
         cin >> estrellas;
         system("cls");
 
@@ -119,6 +120,6 @@ void resenia()
             
         }
         else
-            cout << "ponga un numero dentro del rango por favor\n";
-    } while (estrellas < 1 || estrellas > 5);//se ocupara un do while por si el usuario ingresa un numero fuera del rango, el programa le volvera a solicitar el numero
-}
+            cout << "Ponga un numero dentro del rango por favor\n";
+    } while (estrellas < 1 || estrellas > 5);//se ocupara un do while por si el usuario ingresa un numero fuera del rango
+}                                            // el programa le volvera a solicitar el numero
