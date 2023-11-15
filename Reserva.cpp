@@ -4,6 +4,7 @@ using namespace std;
 void comentariosUsuario();
 void verResenias();
 void resenia();
+void recomendacionPlatos();
 
 int main()
 {
@@ -14,6 +15,7 @@ do {
     cout << "1.Dejar un comentario sobre nustros servicios \n";
     cout << "2.Ver resenias de otros clientes\n";
     cout << "3.Calificar nuestros servicio \n";
+    cout << "4.Recomendacion de platos \n";
     cout << "Su opcion es: ";
     cin  >> opcion;
     system("cls");
@@ -33,6 +35,10 @@ do {
         cout<<"--------calificar nuestros servicios--------\n";
         resenia();
         
+        break;
+    case 4:
+        cout<<"--------Recomendacion de platos--------\n";
+        recomendacionPlatos();
         break;
     default:cout<<"Elija una opcion correcta \n";
         break;
@@ -148,3 +154,54 @@ void resenia()
             cout<<"No se pudo abrir el archivo para guardar el comentario.\n";
         }    
 }
+
+void recomendacionPlatos(){
+    int opcion;
+    bool confirmacion;
+
+    cout<<"Elija un plato por favor.\n";
+    cout<<"Plato.                          Precio.\n";
+    cout<<"1-Espagueti.                      $4\n";
+    cout<<"2-Carne asada.                    $7\n";
+    cout<<"3-Hamburguesa doble carne.        $10\n";
+    cout<<"Su opcion es: ";
+    cin>>opcion;
+    system("cls");
+
+    switch (opcion)
+    {
+    case 1:
+        cout<<"Esta seguro de elegir espagueti? (1-si, 0-no)\n";
+        cin>>confirmacion;
+        system("cls");
+        if (confirmacion == 1)
+        {
+            cout<<"Se a confirmado su pedido";
+        }else cout<<"vuelva a elegir una opcion por favor";
+        
+        break;
+
+    case 2:
+        cout<<"Esta seguro de elegir carne asada? (1-si, 0-no)\n";
+        cin>>confirmacion;
+        system("cls");
+        if (confirmacion == 1)
+        {
+            cout<<"Se a confirmado su pedido";
+        }else cout<<"vuelva a elegir una opcion por favor";
+        break;
+
+    case 3:
+        cout<<"Esta seguro de elegir Hamburguesa doble carne? (1-si, 0-no)\n";
+        cin>>confirmacion;
+        system("cls");
+        if (confirmacion == 1)
+        {
+            cout<<"Se a confirmado su pedido";
+        }else cout<<"vuelva a elegir una opcion por favor";
+        break;        
+    
+    default:cout<<"Elija una opcion correcta por favor";
+        break;
+    }
+};
