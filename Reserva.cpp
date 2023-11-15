@@ -37,8 +37,10 @@ do {
     default:cout<<"Elija una opcion correcta \n";
         break;
     }
+        cout << "\n";
         cout << "Desea regresar al menu otra vez? (1-Si, 0-No): \n";
-        cin >> repiteMenu;
+        cout <<  "Su opcion es: ";
+        cin  >> repiteMenu;
         system("cls");
 } while (repiteMenu == 1);
 cout<<"Muchas gracias por preferirnos :)";
@@ -69,6 +71,7 @@ if (opcion == 1) {
         if (archivo_comentarios.is_open())//abre el archivo y comienza a capturar los datos
         {
             archivo_comentarios << "Nombres del cliente: " << nombreCliente << "\nApellidos del cliente: "<<apellido_cliente <<"\nComentario: " << comentario << "\n";
+            archivo_comentarios << "\n";
             archivo_comentarios.close();//cierra el archivo y deja de capturar los datos
         } else {
             cout << "No se pudo abrir el archivo para guardar el comentario.\n";
@@ -94,49 +97,54 @@ void verResenias(){
 void resenia()
 {
     int calificacion, estrellas;
-    string nombre;
+    string nombre,apellidos;
 
-    cout << "Ingrese su nombre\n";
-    cin >> nombre;
+    cin.ignore();
+    cout<<"Ingrese sus nombres\n";
+    getline(cin, nombre);
+    cout<<"Ingrese sus apellidos\n";
+    getline(cin, apellidos);
 
     ofstream archivo("registro_de_estrellas.txt", ios::app); // crea el archivo
     if (archivo.is_open())//abre el archivo y comienza a capturar los datos
     {
         do
         {
-        cout << "Califique nuestros servicios del 1 al 5, siendo 5 la maxima nota: \n";
-        cout << "Su calificacion es: ";
-        cin >> estrellas;
+        cout<<"Califique nuestros servicios del 1 al 5, siendo 5 la maxima nota: \n";
+        cout<<"Su calificacion es: ";
+        cin>>estrellas;
         system("cls");
 
         if (estrellas >= 1 && estrellas <= 5)
         {
             
-            cout << "Nombre del cliente: " << nombre << "\n";
+            cout << "Nombres del cliente: " << nombre << "\n";
+            cout << "Apellidos del cliente: " << apellidos << "\n";
             cout << "Numero de estrellas que puso el cliente: ";
 
             for (int i = 0; i < estrellas; i++)
             {
-                cout << "*";
+                cout<<"*";
             }
-            cout << "\n";
+            cout<<"\n";
 
             //escribe la información en el archivo
-            archivo << "Nombre del cliente: " << nombre << "\n";
-            archivo << "Numero de estrellas que puso el cliente: ";
+            archivo<<"Nombre del cliente: " << nombre << "\n";
+            archivo<<"Apellidos del cliente: " << apellidos << "\n";
+            archivo<<"Numero de estrellas que puso el cliente: ";
             for (int i = 0; i < estrellas; i++)
             {
                 archivo << "*";
             }
-            archivo << "\n";
-            archivo << "\n";
+            archivo<<"\n";
+            archivo<<"\n";
         }
         else
-            cout << "Ponga un numero dentro del rango por favor\n";
+            cout<<"Ponga un numero dentro del rango por favor\n";
     } while (estrellas < 1 || estrellas > 5);//se ocupara un do while por si el usuario ingresa un numero fuera del rango que  el programa le volvera a solicitar el numero
 
     archivo.close(); // cierra el archivo
         }else {
-            cout << "No se pudo abrir el archivo para guardar el comentario.\n";
+            cout<<"No se pudo abrir el archivo para guardar el comentario.\n";
         }    
 }
