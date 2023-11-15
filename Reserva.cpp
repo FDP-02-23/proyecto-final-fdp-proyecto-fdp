@@ -34,7 +34,6 @@ do {
     case 3:
         cout<<"--------calificar nuestros servicios--------\n";
         resenia();
-        
         break;
     case 4:
         cout<<"--------Recomendacion de platos--------\n";
@@ -102,7 +101,7 @@ void verResenias(){
 
 void resenia()
 {
-    int calificacion, estrellas;
+    int  estrellas;
     string nombre,apellidos;
 
     cin.ignore();
@@ -158,7 +157,8 @@ void resenia()
 void recomendacionPlatos(){
     int opcion;
     bool confirmacion;
-
+    do
+    {
     cout<<"Elija un plato por favor.\n";
     cout<<"Plato.                          Precio.\n";
     cout<<"1-Espagueti.                      $4\n";
@@ -201,7 +201,10 @@ void recomendacionPlatos(){
         }else cout<<"vuelva a elegir una opcion por favor";
         break;        
     
-    default:cout<<"Elija una opcion correcta por favor";
+    default:cout<<"Elija una opcion correcta por favor\n";
         break;
     }
+    } while (opcion < 1 || opcion > 3);
+    
 };
+
