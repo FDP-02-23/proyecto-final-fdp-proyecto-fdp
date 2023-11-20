@@ -36,16 +36,14 @@ void mostrarMesasDisponibles(const vector<Mesa>& mesas, int numPersonas) {
 
 //funcion para realizar una reserva (se utilizara la hora del dispositivo del usuario para evitar que se hagan reservaciones en horarios pasados)
 void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
-    string fecha, hora;
+    string fecha, hora, nombre, correo;
     int numPersonas;
 
-    time_t now = time(0); //obtiene la hora actual en segundos
-    tm* localTime = localtime(&now); //convierte la hora actual a una estructura de tiempo
-
+    time_t now = time(0);
+    tm* localTime = localtime(&now);
 
     char currentTime[9];
-    strftime(currentTime, 9, "%H:%M:%S", localTime); //formatea la hora actual
-
+    strftime(currentTime, 9, "%H:%M:%S", localTime);
     string currentHour(currentTime);
 
     char opcionDia;
@@ -53,16 +51,16 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     cin >> opcionDia;
 
     if (opcionDia == 'H' || opcionDia == 'h') {
-        if (currentHour >= "08:00:00") { 
+        if (currentHour >= "08:00:00") {
             currentHour = "08:00";
         }
         fecha = "hoy";
     } else if (opcionDia == 'F' || opcionDia == 'f') {
         cout << "Ingrese la fecha: ";
         cin >> fecha;
-        currentHour = "08:00";  //reinicia la hora para futuras reservas a las 8:00 AM
+        currentHour = "08:00";
     } else {
-        cout << "Opcion no valida. Seleccione 'H' para hoy o 'F' para un dia futuro." << endl;
+        cout << "Opción no valida. Seleccione 'H' para hoy o 'F' para un dia futuro." << endl;
         return;
     }
 
@@ -70,7 +68,6 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     cout << "Ingrese la hora (HH:MM): ";
     cin >> hora;
 
-    //comprueba que la hora sea válida
     if (hora != "08:00" && hora != "11:00" && hora != "13:00" && hora != "15:00" && hora != "17:00" && hora != "19:00") {
         cout << "Las reservas solo se permiten en horarios ya especificados." << endl;
         return;
@@ -79,7 +76,6 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     cout << "Numero de personas: ";
     cin >> numPersonas;
 
-    //buscar mesas disponibles que cumplan con la capacidad que pida el user
     mostrarMesasDisponibles(mesas, numPersonas);
 
     int mesaSeleccionada;
@@ -88,17 +84,18 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
 
     for (Mesa& mesa : mesas) {
         if (mesa.numero == mesaSeleccionada && !mesa.reservada) {
-            mesa.reservada = true; //marca la mesa como reservada
-
-            string nombre, correo;
             cout << "Ingrese su nombre: ";
             cin.ignore();
-            getline(cin, nombre); //lee el nombre del cliente, incluyendo los espacios
+            getline(cin, nombre);
             cout << "Ingrese su correo electronico: ";
             cin >> correo;
 
+            mesa.reservada = true;
+            mesa.ocupadaPor = nombre;  //asigna el nombre del cliente a la mesa
+
             Reserva nuevaReserva = {fecha, hora, numPersonas, mesa.numero, nombre, correo};
-            reservas.push_back(nuevaReserva);  //agrega la reserva al vector de reservas
+            reservas.push_back(nuevaReserva);
+
             cout << "Reserva exitosa para la Mesa #" << mesa.numero << endl;
             return;
         }
@@ -123,6 +120,16 @@ void verReservas(const vector<Reserva>& reservas, const string& password) {
         cout << "Contrasenia incorrecta. No tiene acceso a ver las reservas." << endl;
     }
 
+//funcion para mostrar las mesas ocupadas
+void mostrarMesasOcupadas(const vector<Mesa>& mesas) {
+    cout << "Mesas actualmente ocupadas:" << endl;
+    for (const Mesa& mesa : mesas) {
+        if (mesa.reservada) {
+            cout << "Mesa #" << mesa.numero << " (Ocupada por: " << mesa.ocupadaPor << ")" << endl;
+        }
+    }
+}
+    
 //funcion para limpiar la info de los vectores de reservas y reseñas
 void eliminarReservasYResenas(vector<Reserva>& reservas) {
 // Limpiar el vector de reservas
@@ -202,8 +209,9 @@ int main() {
                 cout << "Menu de administrador:" << endl;
                 cout << "1. Ver reservas hechas" << endl;
                 cout << "2. Ver resenias hechas" << endl;
-                cout << "3. Eliminar reservas y/o resenias" << endl;
-                cout << "4. Generar archivos con las reservas y comentarios hechos" << endl;
+                cout << "3. Ver mesas ocupadas" << endl;
+                cout << "4. Eliminar reservas y/o resenias" << endl;
+                cout << "5. Generar archivos con las reservas y comentarios hechos" << endl;
                 cout << "Seleccione una opcion: ";
                 cin >> opcionAdmin;
 
@@ -212,12 +220,15 @@ int main() {
                         verReservas(reservas, empleadoPassword);
                         break;
                     case 2:
-                        verResenas(reservas);
-                        break;
+                        //funcion para ver reservas                       
+                       break;
                     case 3:
-                        eliminarReservasYResenas(reservas);
+                        mostrarMesasOcupadas(mesas);
                         break;
                     case 4:
+                        eliminarReservasYResenas(reservas);
+                        break;
+                    case 5:
                         generarArchivos(reservas);
                         break;
                     default:
