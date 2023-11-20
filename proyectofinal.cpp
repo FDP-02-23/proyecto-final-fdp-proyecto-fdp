@@ -2,6 +2,7 @@
 #include <string>
 #include <vector> //permite usar vectores para almacenar datos mas facil
 #include <ctime> //se utiliza para trabajar con el tiempo
+#include <iomanip> //ayuda a formatear la salida
 
 using namespace std;
 
@@ -105,6 +106,22 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     cout << "La mesa seleccionada no esta disponible." << endl;
 }
 
+//funcion para mostrar las reservas hechas
+void verReservas(const vector<Reserva>& reservas, const string& password) {
+    string empleadoPassword; //variable para almacenar la contraseña
+    cout << "Ingrese la contrasenia de empleado: ";
+    cin >> empleadoPassword;
+
+    if (empleadoPassword == password) { //comprueba si la contraseña ingresada coincide con la contraseña proporcionada
+        cout << "Reservas hechas:" << endl;
+        for (const Reserva& reserva : reservas) { //itera a traves de cada reserva en el vector de reservas
+            cout << "Fecha: " << reserva.fecha << " -- Hora: " << reserva.hora << " -- Mesa: #" << reserva.mesaAsignada
+                 << " -- Personas: " << reserva.numPersonas << " -- Nombre: " << reserva.nombreCliente << " -- Correo: " << reserva.correoCliente << endl;
+        }
+    } else {
+        cout << "Contrasenia incorrecta. No tiene acceso a ver las reservas." << endl;
+    }
+
 int main() {
 
   //vector donde se registran las mesas del restaurante
@@ -145,7 +162,7 @@ int main() {
 
         switch (opcion) {
             case 1:
-                //funcion para hacer una reserva
+                hacerReserva(mesas, reservas);
                 break;
             case 2:
                 // Menú de administrador
@@ -160,7 +177,7 @@ int main() {
 
                 switch (opcionAdmin) {
                     case 1:
-                        //funcion para ver reservas hechas
+                         verReservas(reservas, empleadoPassword);
                         break;
                     case 2:
                         //funcion para ver reseñas hechas
