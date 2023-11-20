@@ -122,6 +122,14 @@ void verReservas(const vector<Reserva>& reservas, const string& password) {
         cout << "Contrasenia incorrecta. No tiene acceso a ver las reservas." << endl;
     }
 
+//funcion para limpiar la info de los vectores de reservas y reseñas
+void eliminarReservasYResenas(vector<Reserva>& reservas) {
+// Limpiar el vector de reservas
+    reservas.clear();
+    cout << "Todas las reservas y reseñas han sido eliminadas." << endl;
+}
+
+
 int main() {
 
   //vector donde se registran las mesas del restaurante
