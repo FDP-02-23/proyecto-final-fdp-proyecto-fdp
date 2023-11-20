@@ -12,6 +12,7 @@ struct Mesa {
     int numero;
     int capacidad;
     bool reservada;
+    string ocupadaPor; //info del cliente que reservo la mesa
 };
 
 //struct para representar una reserva
@@ -47,7 +48,7 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     string currentHour(currentTime);
 
     char opcionDia;
-    cout << "Desea hacer la reserva para hoy (H) o para un dia futuro (F)?: ";
+    cout << "Desea hacer la reserva para hoy (H) o para un día futuro (F)?: ";
     cin >> opcionDia;
 
     if (opcionDia == 'H' || opcionDia == 'h') {
@@ -60,7 +61,7 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
         cin >> fecha;
         currentHour = "08:00";
     } else {
-        cout << "Opción no valida. Seleccione 'H' para hoy o 'F' para un dia futuro." << endl;
+        cout << "Opción no válida. Seleccione 'H' para hoy o 'F' para un día futuro." << endl;
         return;
     }
 
@@ -73,13 +74,13 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
         return;
     }
 
-    cout << "Numero de personas: ";
+    cout << "Número de personas: ";
     cin >> numPersonas;
 
     mostrarMesasDisponibles(mesas, numPersonas);
 
     int mesaSeleccionada;
-    cout << "Seleccione el numero de la mesa deseada: ";
+    cout << "Seleccione el número de la mesa deseada: ";
     cin >> mesaSeleccionada;
 
     for (Mesa& mesa : mesas) {
@@ -87,7 +88,7 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
             cout << "Ingrese su nombre: ";
             cin.ignore();
             getline(cin, nombre);
-            cout << "Ingrese su correo electronico: ";
+            cout << "Ingrese su correo electrónico: ";
             cin >> correo;
 
             mesa.reservada = true;
@@ -101,7 +102,7 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
         }
     }
 
-    cout << "La mesa seleccionada no esta disponible." << endl;
+    cout << "La mesa seleccionada no está disponible." << endl;
 }
 
 //funcion para mostrar las reservas hechas
@@ -118,7 +119,8 @@ void verReservas(const vector<Reserva>& reservas, const string& password) {
         }
     } else {
         cout << "Contrasenia incorrecta. No tiene acceso a ver las reservas." << endl;
-    }
+    } 
+}
 
 //funcion para mostrar las mesas ocupadas
 void mostrarMesasOcupadas(const vector<Mesa>& mesas) {
@@ -129,7 +131,7 @@ void mostrarMesasOcupadas(const vector<Mesa>& mesas) {
         }
     }
 }
-    
+
 //funcion para limpiar la info de los vectores de reservas y reseñas
 void eliminarReservasYResenas(vector<Reserva>& reservas) {
 // Limpiar el vector de reservas
@@ -155,12 +157,9 @@ void generarArchivos(const vector<Reserva>& reservas) {
     }
 }
 
-
-
 int main() {
 
-  //vector donde se registran las mesas del restaurante
-  vector<Mesa> mesas = { 
+    vector<Mesa> mesas = { 
         {1, 4, false},
         {2, 6, false},
         {3, 2, false},
@@ -183,11 +182,11 @@ int main() {
         {20, 8, false}
     };
 
-     vector<Reserva> reservas; //inicializa el vector de reservas 
+    vector<Reserva> reservas; //inicializa el vector de reservas
 
-     string empleadoPassword = "1234";  //contraseña de empleado que se pide al ingresar al menu de admin
-    
-    //menu principal y estructura base del programa
+
+    string empleadoPassword = "1234";  //contraseña de empleado que se pide al ingresar al menu de admin
+
     while (true) {
         int opcion;
         cout << "Bienvenido a X!" << endl;
@@ -203,40 +202,44 @@ int main() {
             case 1:
                 hacerReserva(mesas, reservas);
                 break;
-            case 2:
-                //menu de administrador
-                int opcionAdmin;
-                cout << "Menu de administrador:" << endl;
-                cout << "1. Ver reservas hechas" << endl;
-                cout << "2. Ver resenias hechas" << endl;
-                cout << "3. Ver mesas ocupadas" << endl;
-                cout << "4. Eliminar reservas y/o resenias" << endl;
-                cout << "5. Generar archivos con las reservas y comentarios hechos" << endl;
-                cout << "Seleccione una opcion: ";
-                cin >> opcionAdmin;
+            case 2: {
+    //menu de administrador
+    int opcionAdmin;
+    cout << "Menu de administrador:" << endl;
+    cout << "1. Ver reservas hechas" << endl;
+    cout << "2. Ver resenas hechas" << endl;
+    cout << "3. Ver mesas ocupadas" << endl;
+    cout << "4. Eliminar reservas y/o resenas" << endl;
+    cout << "5. Generar archivos con las reservas y resenas hechos" << endl;
+    cout << "6. Regresar al menu principal" << endl;  // Nueva opción
+    cout << "Seleccione una opcion: ";
+    cin >> opcionAdmin;
 
-                switch (opcionAdmin) {
-                    case 1:
-                        verReservas(reservas, empleadoPassword);
-                        break;
-                    case 2:
-                        //funcion para ver reservas                       
-                       break;
-                    case 3:
-                        mostrarMesasOcupadas(mesas);
-                        break;
-                    case 4:
-                        eliminarReservasYResenas(reservas);
-                        break;
-                    case 5:
-                        generarArchivos(reservas);
-                        break;
-                    default:
-                        cout << "Opción no válida en el menú de administrador." << endl;
-                        break;
-                }
-                break;
-            }
+    switch (opcionAdmin) {
+        case 1:
+            verReservas(reservas, empleadoPassword);
+            break;
+        case 2:
+            //verResenas(reservas);
+            break;
+        case 3:
+            mostrarMesasOcupadas(mesas);
+            break;
+        case 4:
+            eliminarReservasYResenas(reservas);
+            break;
+        case 5:
+            generarArchivos(reservas);
+            break;
+        case 6:
+            cout << "Regresando al menu principal" << endl;
+            break; 
+        default:
+            cout << "Opcion no valida en el menu de administrador." << endl;
+            break;
+        }
+        break;
+    }
             case 3:
                 cout << "Horarios de servicio: 08:00, 11:00, 13:00, 15:00, 17:00, 19:00" << endl;
                 break;
@@ -248,6 +251,9 @@ int main() {
                 break;
         }
     }
+
+    return 0;
+} 
 
     return 0;
 }
