@@ -1,8 +1,61 @@
 #include <iostream>
+#include <string>
+#include <vector> //permite usar vectores para almacenar datos mas facil
 
 using namespace std;
 
+//struct para representar una mesa
+struct Mesa {
+    int numero;
+    int capacidad;
+    bool reservada;
+};
+
+//struct para representar una reserva
+struct Reserva {
+    string fecha;
+    string hora;
+    int numPersonas;
+    int mesaAsignada;
+    string nombreCliente;
+    string correoCliente;
+};
+
+//funcion para mostrar mesas disponibles con capacidad suficiente
+void mostrarMesasDisponibles(const vector<Mesa>& mesas, int numPersonas) {
+    cout << "Mesas disponibles para " << numPersonas << " personas:" << endl;
+    for (const Mesa& mesa : mesas) {
+        if (!mesa.reservada && mesa.capacidad >= numPersonas) {
+            cout << "Mesa #" << mesa.numero << " (Capacidad: " << mesa.capacidad << " personas)" << endl;
+        }
+    }
+}
+
 int main() {
+
+  //vector donde se registran las mesas del restaurante
+  vector<Mesa> mesas = { 
+        {1, 4, false},
+        {2, 6, false},
+        {3, 2, false},
+        {4, 4, false},
+        {5, 8, false},
+        {6, 4, false},
+        {7, 6, false},
+        {8, 2, false},
+        {9, 4, false},
+        {10, 8, false},
+        {11, 4, false},
+        {12, 6, false},
+        {13, 2, false},
+        {14, 4, false},
+        {15, 8, false},
+        {16, 4, false},
+        {17, 6, false},
+        {18, 2, false},
+        {19, 4, false},
+        {20, 8, false}
+    };
   
     //menu principal y estructura base del programa
     while (true) {
