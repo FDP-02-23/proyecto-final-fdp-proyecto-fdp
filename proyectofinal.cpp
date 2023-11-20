@@ -3,6 +3,7 @@
 #include <vector> //permite usar vectores para almacenar datos mas facil
 #include <ctime> //se utiliza para trabajar con el tiempo
 #include <iomanip> //ayuda a formatear la salida
+#include <fstream> //para el manejo de archivos 
 
 using namespace std;
 
@@ -128,6 +129,25 @@ void eliminarReservasYResenas(vector<Reserva>& reservas) {
     reservas.clear();
     cout << "Todas las reservas y reseñas han sido eliminadas." << endl;
 }
+
+//funcion para generar los archivos de reservas y los de reseñas
+void generarArchivos(const vector<Reserva>& reservas) {
+    ofstream archivo("reservas_y_comentarios.txt");
+
+    if (archivo.is_open()) {
+        for (const Reserva& reserva : reservas) {
+            // Escribe la información en el archivo
+            archivo << "Fecha: " << reserva.fecha << " -- Hora: " << reserva.hora << " -- Mesa: #" << reserva.mesaAsignada
+                    << " -- Personas: " << reserva.numPersonas << " -- Nombre: " << reserva.nombreCliente << " -- Correo: " << reserva.correoCliente << endl;
+        }
+
+        archivo.close();
+        cout << "Archivo generado exitosamente: reservas_y_comentarios.txt" << endl;
+    } else {
+        cout << "Error al abrir el archivo." << endl;
+    }
+}
+
 
 
 int main() {
