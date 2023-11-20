@@ -105,21 +105,12 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     cout << "La mesa seleccionada no está disponible." << endl;
 }
 
-//funcion para mostrar las reservas hechas
-void verReservas(const vector<Reserva>& reservas, const string& password) {
-    string empleadoPassword; //variable para almacenar la contraseña
-    cout << "Ingrese la contrasenia de empleado: ";
-    cin >> empleadoPassword;
-
-    if (empleadoPassword == password) { //comprueba si la contraseña ingresada coincide con la contraseña proporcionada
-        cout << "Reservas hechas:" << endl;
-        for (const Reserva& reserva : reservas) { //itera a traves de cada reserva en el vector de reservas
-            cout << "Fecha: " << reserva.fecha << " -- Hora: " << reserva.hora << " -- Mesa: #" << reserva.mesaAsignada
-                 << " -- Personas: " << reserva.numPersonas << " -- Nombre: " << reserva.nombreCliente << " -- Correo: " << reserva.correoCliente << endl;
-        }
-    } else {
-        cout << "Contrasenia incorrecta. No tiene acceso a ver las reservas." << endl;
-    } 
+void verReservas(const vector<Reserva>& reservas) {
+    cout << "Reservas hechas:" << endl;
+    for (const Reserva& reserva : reservas) {
+        cout << "Fecha: " << reserva.fecha << " -- Hora: " << reserva.hora << " -- Mesa: #" << reserva.mesaAsignada
+             << " -- Personas: " << reserva.numPersonas << " -- Nombre: " << reserva.nombreCliente << " -- Correo: " << reserva.correoCliente << endl;
+    }
 }
 
 //funcion para mostrar las mesas ocupadas
@@ -198,26 +189,31 @@ int main() {
         cout << "Seleccione una opcion: ";
         cin >> opcion;
 
+    string inputPassword;
+
         switch (opcion) {
             case 1:
                 hacerReserva(mesas, reservas);
                 break;
             case 2: {
-    //menu de administrador
-    int opcionAdmin;
-    cout << "Menu de administrador:" << endl;
-    cout << "1. Ver reservas hechas" << endl;
-    cout << "2. Ver resenas hechas" << endl;
-    cout << "3. Ver mesas ocupadas" << endl;
-    cout << "4. Eliminar reservas y/o resenas" << endl;
-    cout << "5. Generar archivos con las reservas y resenas hechos" << endl;
-    cout << "6. Regresar al menu principal" << endl;  // Nueva opción
-    cout << "Seleccione una opcion: ";
-    cin >> opcionAdmin;
+                cout << "Ingrese la contrasena de empleado: ";
+                cin >> inputPassword;
 
-    switch (opcionAdmin) {
-        case 1:
-            verReservas(reservas, empleadoPassword);
+                if (inputPassword == empleadoPassword) {
+                    int opcionAdmin;
+                    cout << "Menu de administrador:" << endl;
+                    cout << "1. Ver reservas hechas" << endl;
+                    cout << "2. Ver resenas hechas" << endl;
+                    cout << "3. Ver mesas ocupadas" << endl;
+                    cout << "4. Eliminar reservas y/o resenas" << endl;
+                    cout << "5. Generar archivos con las reservas y resenas hechas" << endl;
+                    cout << "6. Regresar al menu principal" << endl;
+                    cout << "Seleccione una opcion: ";
+                    cin >> opcionAdmin;
+
+                    switch (opcionAdmin) {
+        case 1: 
+            verReservas(reservas);
             break;
         case 2:
             //verResenas(reservas);
@@ -251,9 +247,7 @@ int main() {
                 break;
         }
     }
-
-    return 0;
-} 
-
-    return 0;
 }
+
+    return 0;
+}  
