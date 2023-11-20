@@ -175,7 +175,11 @@ int main() {
         {19, 4, false},
         {20, 8, false}
     };
-  
+
+     vector<Reserva> reservas; //inicializa el vector de reservas 
+
+     string empleadoPassword = "1234";  //contraseña de empleado que se pide al ingresar al menu de admin
+    
     //menu principal y estructura base del programa
     while (true) {
         int opcion;
@@ -193,7 +197,7 @@ int main() {
                 hacerReserva(mesas, reservas);
                 break;
             case 2:
-                // Menú de administrador
+                //menu de administrador
                 int opcionAdmin;
                 cout << "Menu de administrador:" << endl;
                 cout << "1. Ver reservas hechas" << endl;
@@ -205,30 +209,31 @@ int main() {
 
                 switch (opcionAdmin) {
                     case 1:
-                         verReservas(reservas, empleadoPassword);
+                        verReservas(reservas, empleadoPassword);
                         break;
                     case 2:
-                        //funcion para ver reseñas hechas
+                        verResenas(reservas);
                         break;
                     case 3:
-                        //funcion para eliminar reservas y/o reseñas
+                        eliminarReservasYResenas(reservas);
                         break;
                     case 4:
-                        //funcion para generar archivos con reservas y comentarios
+                        generarArchivos(reservas);
                         break;
                     default:
                         cout << "Opción no válida en el menú de administrador." << endl;
                         break;
                 }
                 break;
+            }
             case 3:
                 cout << "Horarios de servicio: 08:00, 11:00, 13:00, 15:00, 17:00, 19:00" << endl;
                 break;
             case 4:
-                cout << "Gracias por visitarnos. Hasta luego!" << endl;
+                cout << "Gracias por visitarnos. Hasta luego." << endl;
                 return 0;
             default:
-                cout << "Por favor, seleccione una opcion valida" << endl;
+                cout << "Por favor, seleccione una opción válida." << endl;
                 break;
         }
     }
