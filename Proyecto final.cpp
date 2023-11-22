@@ -19,3 +19,12 @@ class Restaurante {
 private:
     vector<Reserva> reservas;
 
+public:
+    void mostrarReservas() const {
+        cout << "Reservas actuales:\n";
+        for (const auto& reserva : reservas) {
+            cout << "ID: " << reserva.id << ", Fecha: " << reserva.fecha << ", Personas: " << reserva.numero_personas << "\n";
+        }
+        cout << "-------------------------\n";
+    }
+
