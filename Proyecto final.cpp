@@ -28,3 +28,18 @@ public:
         cout << "-------------------------\n";
     }
 
+ void cancelarReserva(int idReserva) {
+        auto it = find_if(reservas.begin(), reservas.end(),
+            [idReserva](const Reserva& r) { return r.id == idReserva; });
+
+        if (it != reservas.end()) {
+            reservas.erase(it);
+            cout << "Reserva cancelada con éxito.\n";
+        } else {
+            cout << "No se encontró la reserva con el ID proporcionado.\n";
+        }
+    }
+
+void modificarReserva(int idReserva, const string& nuevaFecha, int nuevoNumeroPersonas) {
+        auto it = find_if(reservas.begin(), reservas.end(),
+            [idReserva](const Reserva& r) { return r.id == idReserva; });
