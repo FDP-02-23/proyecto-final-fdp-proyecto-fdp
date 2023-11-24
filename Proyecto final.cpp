@@ -68,17 +68,29 @@ public:
 };
 
 int main() {
+    // Crear una instancia de la clase Restaurante
     Restaurante restaurante;
 
-    // Crear algunas reservas
-    restaurante.mostrarReservas();
-    restaurante.cancelarReserva(123);
+    // Crear y agregar una reserva de ejemplo
+    Reserva nuevaReserva(123, "2023-01-01", 2);
+    restaurante.agregarReserva(nuevaReserva);
 
-    restaurante.mostrarReservas();
-    restaurante.modificarReserva(456, "2023-01-01", 4);
-
+    // Mostrar las reservas (deberías ver la reserva con ID 123)
     restaurante.mostrarReservas();
 
+    // Intentar cancelar una reserva que no existe (ID 456)
+    restaurante.cancelarReserva(456);
+
+    // Mostrar las reservas después de intentar cancelar
+    restaurante.mostrarReservas();
+
+    // Modificar la reserva con ID 123, cambiando fecha y número de personas
+    restaurante.modificarReserva(123, "2023-02-01", 3);
+
+    // Mostrar las reservas después de modificar
+    restaurante.mostrarReservas();
+
+    // Obtener y mostrar los platos recomendados
     vector<string> platosRecomendados = restaurante.recomendarPlatos();
     cout << "Platos recomendados:\n";
     for (const auto& plato : platosRecomendados) {
