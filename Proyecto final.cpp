@@ -19,12 +19,13 @@ private:
     vector<Reserva> reservas;
 
 public:
+    // Muestra todas las reservas actuales
     void mostrarReservas() const {
         cout << "Reservas actuales:\n";
         for (const auto& reserva : reservas) {
             cout << "ID: " << reserva.id << ", Fecha: " << reserva.fecha << ", Personas: " << reserva.numero_personas << "\n";
         }
-        cout << "-------------------------\n"; 
+        cout << "-------------------------\n";
     }
 
  void cancelarReserva(int idReserva) {
@@ -38,7 +39,7 @@ public:
             cout << "No se encontró la reserva con el ID proporcionado.\n";
         }
     }
-
+// Cancela una reserva por ID
 void modificarReserva(int idReserva, const string& nuevaFecha, int nuevoNumeroPersonas) {
         auto it = find_if(reservas.begin(), reservas.end(),
             [idReserva](const Reserva& r) { return r.id == idReserva; });
