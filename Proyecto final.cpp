@@ -28,8 +28,8 @@ public:
         cout << "-------------------------\n";
     }
 
-// Cancela una reserva por ID
- void cancelarReserva(int idReserva) {
+    // Cancela una reserva por ID
+    void cancelarReserva(int idReserva) {
         auto it = find_if(reservas.begin(), reservas.end(),
             [idReserva](const Reserva& r) { return r.id == idReserva; });
 
@@ -63,7 +63,7 @@ public:
 
     // Recomienda tres platos de comida
     vector<string> recomendarPlatos() {
-        return {"Pasta", "Carne asada", "Hamburguesa doble carne"};
+        return {"Pasta", "Carne Asada", "Hamburguesa doble carne"};
     }
 };
 
