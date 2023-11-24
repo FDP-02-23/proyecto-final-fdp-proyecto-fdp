@@ -28,6 +28,7 @@ public:
         cout << "-------------------------\n";
     }
 
+// Cancela una reserva por ID
  void cancelarReserva(int idReserva) {
         auto it = find_if(reservas.begin(), reservas.end(),
             [idReserva](const Reserva& r) { return r.id == idReserva; });
@@ -39,8 +40,9 @@ public:
             cout << "No se encontró la reserva con el ID proporcionado.\n";
         }
     }
-// Cancela una reserva por ID
-void modificarReserva(int idReserva, const string& nuevaFecha, int nuevoNumeroPersonas) {
+
+    // Modifica una reserva por ID, cambiando fecha y número de personas
+    void modificarReserva(int idReserva, const string& nuevaFecha, int nuevoNumeroPersonas) {
         auto it = find_if(reservas.begin(), reservas.end(),
             [idReserva](const Reserva& r) { return r.id == idReserva; });
 
@@ -52,10 +54,16 @@ void modificarReserva(int idReserva, const string& nuevaFecha, int nuevoNumeroPe
             cout << "No se encontró la reserva con el ID proporcionado.\n";
         }
     }
-vector<string> recomendarPlatos() {
-        // Lógica para recomendar 3 platos de comida
-        
-        return {"Pasta Carbonara", "Carne asada", "Hamburguesa doble carne"};
+
+    // Agrega una nueva reserva al restaurante
+    void agregarReserva(const Reserva& nuevaReserva) {
+        reservas.push_back(nuevaReserva);
+        cout << "Reserva añadida con éxito.\n";
+    }
+
+    // Recomienda tres platos de comida
+    vector<string> recomendarPlatos() {
+        return {"Pasta", "Carne asada", "Hamburguesa doble carne"};
     }
 };
 
