@@ -10,7 +10,6 @@ struct Reserva {
     string fecha;
     int numero_personas;
 
-   // Constructor para facilitar la creación de reservas
     Reserva(int _id, const string& _fecha, int _numero_personas)
         : id(_id), fecha(_fecha), numero_personas(_numero_personas) {}
 };
@@ -25,7 +24,7 @@ public:
         for (const auto& reserva : reservas) {
             cout << "ID: " << reserva.id << ", Fecha: " << reserva.fecha << ", Personas: " << reserva.numero_personas << "\n";
         }
-        cout << "-------------------------\n";
+        cout << "-------------------------\n"; 
     }
 
  void cancelarReserva(int idReserva) {
