@@ -31,6 +31,7 @@ void cancelarReserva(vector<Reserva>& reservas) {
         return r.numeroReserva == numeroReserva;
     });
 
+
     if (it != reservas.end()) {
         // Elimina la reserva si se encuentra
         reservas.erase(it);
