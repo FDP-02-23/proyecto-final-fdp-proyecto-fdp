@@ -1,100 +1,175 @@
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 #include <algorithm>
 
 using namespace std;
 
+// Estructura para representar una reserva
 struct Reserva {
-    int id;
     string fecha;
-    int numero_personas;
-
-    Reserva(int _id, const string& _fecha, int _numero_personas)
-        : id(_id), fecha(_fecha), numero_personas(_numero_personas) {}
+    string hora;
+    int numPersonas;
+    int mesaAsignada;
+    string nombreCliente;
+    string correoCliente;
+    int numeroReserva;
 };
 
-class Restaurante {
-private:
-    vector<Reserva> reservas;
+// Función para generar un número de reserva aleatorio
+int generarNumeroReserva() {
+    return rand() % 10000 + 1000;  // Números aleatorios entre 1000 y 9999
+}
 
-public:
-    // Muestra todas las reservas actuales
-    void mostrarReservas() const {
-        cout << "Reservas actuales:\n";
-        for (const auto& reserva : reservas) {
-            cout << "ID: " << reserva.id << ", Fecha: " << reserva.fecha << ", Personas: " << reserva.numero_personas << "\n";
+// Función para que el usuario cancele una reserva 
+void cancelarReserva(vector<Reserva>& reservas) {
+    int numeroReserva;
+    cout << "Ingrese el número de reserva que desea cancelar: ";
+    cin >> numeroReserva;
+
+    auto it = find_if(reservas.begin(), reservas.end(), [numeroReserva](const Reserva& r) {
+        return r.numeroReserva == numeroReserva;
+    });
+
+    if (it != reservas.end()) {
+        // Elimina la reserva si se encuentra
+        reservas.erase(it);
+        cout << "Reserva cancelada exitosamente." << endl;
+    } else {
+        cout << "Número de reserva no encontrado. Verifique e intente nuevamente." << endl;
+    }
+}
+
+// Función para que el usuario modifique su reserva 
+void modificarReserva(vector<Reserva>& reservas) {
+    int numeroReserva;
+    cout << "Ingrese el número de reserva que desea modificar: ";
+    cin >> numeroReserva;
+
+    auto it = find_if(reservas.begin(), reservas.end(), [numeroReserva](const Reserva& r) {
+        return r.numeroReserva == numeroReserva;
+    });
+
+    if (it != reservas.end()) {
+        // Muestra los detalles actuales de la reserva
+        cout << "Detalles actuales de la reserva:" << endl;
+        cout << "Fecha: " << it->fecha << " -- Hora: " << it->hora << " -- Mesa: #" << it->mesaAsignada
+             << " -- Personas: " << it->numPersonas << " -- Nombre: " << it->nombreCliente << " -- Correo: " << it->correoCliente << endl;
+
+        // Pide al usuario los nuevos detalles
+        string nuevaFecha, nuevaHora, nuevoNombre, nuevoCorreo;
+        int nuevaNumPersonas;
+
+        cout << "Ingrese la nueva fecha (o enter para mantener la actual): ";
+        cin.ignore();
+        getline(cin, nuevaFecha);
+        if (nuevaFecha.empty()) {
+            nuevaFecha = it->fecha;
         }
-        cout << "-------------------------\n";
-    }
 
-    // Cancela una reserva por ID
-    void cancelarReserva(int idReserva) {
-        auto it = find_if(reservas.begin(), reservas.end(),
-            [idReserva](const Reserva& r) { return r.id == idReserva; });
-
-        if (it != reservas.end()) {
-            reservas.erase(it);
-            cout << "Reserva cancelada con éxito.\n";
-        } else {
-            cout << "No se encontró la reserva con el ID proporcionado.\n";
+        cout << "Ingrese la nueva hora (o enter para mantener la actual): ";
+        getline(cin, nuevaHora);
+        if (nuevaHora.empty()) {
+            nuevaHora = it->hora;
         }
-    }
 
-    // Modifica una reserva por ID, cambiando fecha y número de personas
-    void modificarReserva(int idReserva, const string& nuevaFecha, int nuevoNumeroPersonas) {
-        auto it = find_if(reservas.begin(), reservas.end(),
-            [idReserva](const Reserva& r) { return r.id == idReserva; });
-
-        if (it != reservas.end()) {
-            it->fecha = nuevaFecha;
-            it->numero_personas = nuevoNumeroPersonas;
-            cout << "Reserva modificada con éxito.\n";
-        } else {
-            cout << "No se encontró la reserva con el ID proporcionado.\n";
+        cout << "Ingrese el nuevo número de personas (o 0 para mantener el actual): ";
+        cin >> nuevaNumPersonas;
+        if (nuevaNumPersonas == 0) {
+            nuevaNumPersonas = it->numPersonas;
         }
-    }
 
-    // Agrega una nueva reserva al restaurante
-    void agregarReserva(const Reserva& nuevaReserva) {
-        reservas.push_back(nuevaReserva);
-        cout << "Reserva añadida con éxito.\n";
-    }
+        cout << "Ingrese el nuevo nombre (o enter para mantener el actual): ";
+        cin.ignore();
+        getline(cin, nuevoNombre);
+        if (nuevoNombre.empty()) {
+            nuevoNombre = it->nombreCliente;
+        }
 
-    // Recomienda tres platos de comida
-    vector<string> recomendarPlatos() {
-        return {"Pasta", "Carne Asada", "Hamburguesa doble carne"};
+        cout << "Ingrese el nuevo correo (o enter para mantener el actual): ";
+        getline(cin, nuevoCorreo);
+        if (nuevoCorreo.empty()) {
+            nuevoCorreo = it->correoCliente;
+        }
+
+        // Actualiza la reserva con los nuevos detalles
+        it->fecha = nuevaFecha;
+        it->hora = nuevaHora;
+        it->numPersonas = nuevaNumPersonas;
+        it->nombreCliente = nuevoNombre;
+        it->correoCliente = nuevoCorreo;
+
+        cout << "Reserva modificada exitosamente." << endl;
+    } else {
+        cout << "Número de reserva no encontrado. Verifique e intente nuevamente." << endl;
     }
-};
+}
+
+// Función para recomendar un plato aleatorio
+void recomendacionPlatos() {
+    srand(time(0));
+
+    // Lista de platos
+    string platos[] = {"Espagueti", "Carne asada", "Hamburguesa doble carne", "Ensalada de pollo", "Sushi"};
+
+    // Elegir aleatoriamente un plato
+    int indiceAleatorio = rand() % 5; // 5 es el número de platos en la lista
+    string platoRecomendado = platos[indiceAleatorio];
+
+    int confirmacion;
+    cout << "La recomendacion del dia es: " << platoRecomendado << endl;
+    cout << "Esta seguro de elegir este plato? (1: SI, 0: NO)\n";
+    cin >> confirmacion;
+
+    if (confirmacion == 1) {
+        cout << "Se ha confirmado su pedido." << endl;
+    } else {
+        cout << "Vuelva a elegir una opción, por favor." << endl;
+    }
+}
+
+// Función para recomendar un plato aleatorio
+void recomendacionPlatos() {
+    // Inicializar la semilla para la generación de números aleatorios
+    srand(time(0));
+
+    // Lista de platos
+    string platos[] = {"Pasta", "Carne asada", "Hamburguesa doble carne", "Ensalada de pollo", "Sushi"};
+
+    // Elegir aleatoriamente un plato
+    int indiceAleatorio = rand() % 5; // 5 es el número de platos en la lista
+    string platoRecomendado = platos[indiceAleatorio];
+
+    int confirmacion;
+    cout << "La recomendacion del dia es: " << platoRecomendado << endl;
+    cout << "Esta seguro de elegir este plato? (1: SI, 0: NO)\n";
+    cin >> confirmacion;
+
+    if (confirmacion == 1) {
+        cout << "Se ha confirmado su pedido." << endl;
+    } else {
+        cout << "Vuelva a elegir una opcion, por favor." << endl;
+    }
+}
 
 int main() {
-    // Crear una instancia de la clase Restaurante
-    Restaurante restaurante;
+  
 
-    // Crear y agregar una reserva de ejemplo
-    Reserva nuevaReserva(123, "2023-01-01", 2);
-    restaurante.agregarReserva(nuevaReserva);
+    while (true) {
+        int opcion;
 
-    // Mostrar las reservas (deberías ver la reserva con ID 123)
-    restaurante.mostrarReservas();
-
-    // Intentar cancelar una reserva que no existe (ID 456)
-    restaurante.cancelarReserva(456);
-
-    // Mostrar las reservas después de intentar cancelar
-    restaurante.mostrarReservas();
-
-    // Modificar la reserva con ID 123, cambiando fecha y número de personas
-    restaurante.modificarReserva(123, "2023-02-01", 3);
-
-    // Mostrar las reservas después de modificar
-    restaurante.mostrarReservas();
-
-    // Obtener y mostrar los platos recomendados
-    vector<string> platosRecomendados = restaurante.recomendarPlatos();
-    cout << "Platos recomendados:\n";
-    for (const auto& plato : platosRecomendados) {
-        cout << plato << "\n";
+        switch (opcion) {
+            // ...
+            case 6:  
+                //modificarReserva();
+                break;
+            case 7:  
+                //modificarReserva();
+                break;
+            case 8:
+                //cancelarReserva();
+            // break;
+        }
     }
 
     return 0;
