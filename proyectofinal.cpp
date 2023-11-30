@@ -12,7 +12,7 @@ struct Mesa {
     int numero;
     int capacidad;
     bool reservada;
-    string ocupadaPor; //info del cliente que reservo la mesa
+    string ocupadaPor; //info del cliente que reservó la mesa
 };
 
 //struct para representar una reserva
@@ -23,6 +23,7 @@ struct Reserva {
     int mesaAsignada;
     string nombreCliente;
     string correoCliente;
+    string numeroReserva;
 };
 
 //funcion para mostrar mesas disponibles con capacidad suficiente
@@ -40,18 +41,22 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     string fecha, hora, nombre, correo;
     int numPersonas;
 
+    //obteniene la hora actual del dispositivo del user
     time_t now = time(0);
     tm* localTime = localtime(&now);
 
+    //convierte la hora actual a un formato legible y la almacena en la variable currentHour
     char currentTime[9];
     strftime(currentTime, 9, "%H:%M:%S", localTime);
     string currentHour(currentTime);
 
     char opcionDia;
-    cout << "Desea hacer la reserva para hoy (H) o para un día futuro (F)?: ";
+    cout << "Desea hacer la reserva para hoy (H) o para un dia futuro (F)?: ";
     cin >> opcionDia;
+    system("cls");
 
     if (opcionDia == 'H' || opcionDia == 'h') {
+        //si la hora actual es igual o mayor a las 08:00:00, ajusta la hora a 08:00
         if (currentHour >= "08:00:00") {
             currentHour = "08:00";
         }
@@ -61,7 +66,7 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
         cin >> fecha;
         currentHour = "08:00";
     } else {
-        cout << "Opción no válida. Seleccione 'H' para hoy o 'F' para un día futuro." << endl;
+        cout << "Opcion no valida. Seleccione 'H' para hoy o 'F' para un dia futuro." << endl;
         return;
     }
 
@@ -69,44 +74,66 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     cout << "Ingrese la hora (HH:MM): ";
     cin >> hora;
 
+    //verifica que la hora ingresada sea válida
     if (hora != "08:00" && hora != "11:00" && hora != "13:00" && hora != "15:00" && hora != "17:00" && hora != "19:00") {
         cout << "Las reservas solo se permiten en horarios ya especificados." << endl;
         return;
     }
 
-    cout << "Número de personas: ";
+    //pide al usuario el número de personas para la reserva
+    cout << "Numero de personas (maximo 8 personas): ";
     cin >> numPersonas;
+    system("cls");
 
-    mostrarMesasDisponibles(mesas, numPersonas);
+    //verifica que el número de personas esté en el rango válido
+    if (numPersonas >= 1 && numPersonas <= 8) {
+        //muestra las mesas disponibles para el número de personas ingresado
+        mostrarMesasDisponibles(mesas, numPersonas);
 
-    int mesaSeleccionada;
-    cout << "Seleccione el número de la mesa deseada: ";
-    cin >> mesaSeleccionada;
+        //pide al usuario que seleccione el número de la mesa deseada
+        int mesaSeleccionada;
+        cout << "Seleccione el numero de la mesa deseada: ";
+        cin >> mesaSeleccionada;
+        system("cls");
 
-    for (Mesa& mesa : mesas) {
-        if (mesa.numero == mesaSeleccionada && !mesa.reservada) {
-            cout << "Ingrese su nombre: ";
-            cin.ignore();
-            getline(cin, nombre);
-            cout << "Ingrese su correo electrónico: ";
-            cin >> correo;
+        //busca la mesa seleccionada en el vector de mesas
+        for (Mesa& mesa : mesas) {
+            //verifica que la mesa esté disponible y tenga capacidad suficiente
+            if (mesa.numero == mesaSeleccionada && !mesa.reservada && mesa.capacidad >= numPersonas) {
+                cout << "Ingrese su nombre: ";
+                cin.ignore(); //ignora el salto de línea pendiente en el búfer
+                getline(cin, nombre);
 
-            mesa.reservada = true;
-            mesa.ocupadaPor = nombre;  //asigna el nombre del cliente a la mesa
+                cout << "Ingrese su correo electronico: ";
+                cin >> correo;
+                system("cls");
 
-            Reserva nuevaReserva = {fecha, hora, numPersonas, mesa.numero, nombre, correo};
-            reservas.push_back(nuevaReserva);
+                //marca la mesa como reservada y asigna el nombre del cliente a la mesa
+                mesa.reservada = true;
+                mesa.ocupadaPor = nombre;
 
-            cout << "Reserva exitosa para la Mesa #" << mesa.numero << endl;
-            return;
+                //crea una nueva reserva con los detalles proporcionados y asignar un numero de reserva aleatorio
+                Reserva nuevaReserva = {fecha, hora, numPersonas, mesa.numero, nombre, correo, to_string(generarNumeroReserva())}; //convierte el numero de reserva a su representación como string
+                //agrega la nueva reserva al vector de reservas
+                reservas.push_back(nuevaReserva);
+
+                cout << "Reserva exitosa para la Mesa #" << mesa.numero << endl;
+                cout << "Reserva exitosa! Su numero de reserva es: " << nuevaReserva.numeroReserva << endl;
+
+                return;
+            }
         }
-    }
 
-    cout << "La mesa seleccionada no está disponible." << endl;
+        cout << "La mesa seleccionada no esta disponible." << endl;
+    } else {
+        cout << "El numero de personas debe estar entre 1 y 8." << endl;
+    }
 }
 
+//función para ver las reservas hechas
 void verReservas(const vector<Reserva>& reservas) {
     cout << "Reservas hechas:" << endl;
+    //for que itera sobre el vector de reservas y muestra los detalles de cada reserva
     for (const Reserva& reserva : reservas) {
         cout << "Fecha: " << reserva.fecha << " -- Hora: " << reserva.hora << " -- Mesa: #" << reserva.mesaAsignada
              << " -- Personas: " << reserva.numPersonas << " -- Nombre: " << reserva.nombreCliente << " -- Correo: " << reserva.correoCliente << endl;
@@ -116,6 +143,7 @@ void verReservas(const vector<Reserva>& reservas) {
 //funcion para mostrar las mesas ocupadas
 void mostrarMesasOcupadas(const vector<Mesa>& mesas) {
     cout << "Mesas actualmente ocupadas:" << endl;
+    //for que itera sobre el vector de mesas y muestra las mesas actualmente ocupadas con los nombres de los clientes
     for (const Mesa& mesa : mesas) {
         if (mesa.reservada) {
             cout << "Mesa #" << mesa.numero << " (Ocupada por: " << mesa.ocupadaPor << ")" << endl;
@@ -125,7 +153,7 @@ void mostrarMesasOcupadas(const vector<Mesa>& mesas) {
 
 //funcion para limpiar la info de los vectores de reservas y reseñas
 void eliminarReservasYResenas(vector<Reserva>& reservas) {
-// Limpiar el vector de reservas
+//limpia el vector de reservas
     reservas.clear();
     cout << "Todas las reservas y reseñas han sido eliminadas." << endl;
 }
@@ -136,13 +164,13 @@ void generarArchivos(const vector<Reserva>& reservas) {
 
     if (archivo.is_open()) {
         for (const Reserva& reserva : reservas) {
-            // Escribe la información en el archivo
+            //escribe la informacón en el archivo
             archivo << "Fecha: " << reserva.fecha << " -- Hora: " << reserva.hora << " -- Mesa: #" << reserva.mesaAsignada
                     << " -- Personas: " << reserva.numPersonas << " -- Nombre: " << reserva.nombreCliente << " -- Correo: " << reserva.correoCliente << endl;
         }
 
         archivo.close();
-        cout << "Archivo generado exitosamente: reservas_y_comentarios.txt" << endl;
+        cout << "Archivo generado exitosamente: reserva.txt" << endl;
     } else {
         cout << "Error al abrir el archivo." << endl;
     }
