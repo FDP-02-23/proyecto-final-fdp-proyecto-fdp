@@ -300,6 +300,25 @@ void resenia()
         }    
 }
 
+// Función para realizar un log de acciones
+void registrarAccion(const string& mensaje) {
+    ofstream logFile("log.txt", ios::app); // Abre el archivo de log en modo de agregar
+
+    if (logFile.is_open()) {
+        time_t now = time(0);
+        tm* localTime = localtime(&now);
+
+        char currentTime[20];
+        strftime(currentTime, 20, "%Y-%m-%d %H:%M:%S", localTime);
+
+        logFile << "[" << currentTime << "] " << mensaje << endl;
+
+        logFile.close();
+    } else {
+        cout << "Error al abrir el archivo de log." << endl;
+    }
+}
+
 int main() {
     vector<Mesa> mesas = { 
         {1, 4, false},
@@ -373,25 +392,33 @@ int main() {
                         switch (opcionAdmin) {
                             case 1: 
                                 verReservas(reservas);
-                                 break;
+                                registrarAccion("El administrador ha visto las reservas hechas.");
+                                break;
                             case 2:
                                 verResenias();
+                                registrarAccion("El administrador ha visto las reseñas hechas.");
                                 break;
                             case 3:
                                 mostrarMesasOcupadas(mesas);
+                                registrarAccion("El administrador ha visto las mesas ocupadas.");
                                 break;
                             case 4:
                                 eliminarReservas(reservas);
+                                registrarAccion("El administrador ha eliminado todas las reservas.");
                                 break;
                             case 5:
                                 generarArchivos(reservas);
+                                registrarAccion("El administrador ha generado archivos con las reservas hechas.");
                                 break;
                             case 6:
+                                cout << "Modificacion de reserva por peticion del usuario" << endl;
                                 //modificarReserva(reservas);
+                                registrarAccion("Se ha modificado una reserva.");
                                 break; 
 
                             case 7:
                                 cout << "Regresando al menu principal" << endl;
+                                registrarAccion("El administrador ha regresado al menu principal.");
                                 break;    
                             default:
                                 cout << "Opcion no valida en el menu de administrador." << endl;
@@ -404,34 +431,43 @@ int main() {
                 break;
             case 2: {
                 hacerReserva(mesas, reservas);
+                registrarAccion("Se ha realizado una reserva.");
                 break;
             }
             case 3:
                 cout << "Horarios de servicio: 08:00, 11:00, 13:00, 15:00, 17:00, 19:00" << endl;
+                registrarAccion("Se ha consultado el horario de servicio.");
                 break;
             case 4:
                 cout<<"--------Esta en el apartado de comentarios--------\n";
                 comentariosUsuario();
+                registrarAccion("El cliente ha dejado un comentario sobre nuestros servicios.");
                 break;
             case 5:
                 cout<<"--------Calificar nuestros servicios--------\n";
                 resenia();
+                registrarAccion("El cliente ha calificado nuestros servicios.");
                 break;
             case 6:
                 cout<<"--------Recomendacion de platos--------\n";
                 //recomendacionPlatos();
+                registrarAccion("Se ha consultado la recomendación de platos.");
                 break;   
             case 7:
                 //cancelarReserva(reservas);
+                registrarAccion("Se ha cancelado una reserva.");
                 break;   
             case 8:
                 //modificarReserva(reservas);
+                registrarAccion("Se ha modificado una reserva.");
                 break;   
             case 9:
                 verCalificaciones();
+                registrarAccion("Se han consultado las calificaciones de estrellas.");
                 break;
             case 10:
                 cout << "Gracias por visitarnos. Hasta luego." << endl;
+                registrarAccion("El usuario ha salido del programa.");
                 return 0;
             default:
                 cout << "Por favor, seleccione una opcion valida." << endl;
@@ -439,5 +475,5 @@ int main() {
         }
     }
 
-    return 0;
+    return 0;
 }
