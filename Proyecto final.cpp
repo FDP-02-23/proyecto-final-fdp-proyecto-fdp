@@ -31,7 +31,6 @@ void cancelarReserva(vector<Reserva>& reservas) {
         return r.numeroReserva == numeroReserva;
     });
 
-
     if (it != reservas.end()) {
         // Elimina la reserva si se encuentra
         reservas.erase(it);
@@ -110,8 +109,6 @@ void modificarReserva(vector<Reserva>& reservas) {
 void recomendacionPlatos() {
     srand(time(0));
 
-    
-
     // Lista de platos
     string platos[] = {"Espagueti", "Carne asada", "Hamburguesa doble carne", "Ensalada de pollo", "Sushi"};
 
@@ -177,3 +174,5 @@ int main() {
 
     return 0;
 }
+
+
