@@ -4,6 +4,8 @@
 #include <ctime> //se utiliza para trabajar con el tiempo
 #include <iomanip> //ayuda a formatear la salida
 #include <fstream> //para el manejo de archivos 
+#include <cstdlib>
+#include <algorithm>
 
 using namespace std;
 
@@ -162,6 +164,99 @@ void eliminarReservas(vector<Reserva>& reservas) {
     cout << "Todas las reservas han sido eliminadas." << endl;
 }
 
+// Función para que el usuario cancele una reserva
+void cancelarReserva(vector<Reserva>& reservas) {
+    int numeroReserva;
+    cout << "Ingrese el numero de reserva que desea cancelar: ";
+    cin >> numeroReserva;
+
+    auto it = find_if(reservas.begin(), reservas.end(), [numeroReserva](const Reserva& r) {
+       return r.numeroReserva == to_string(numeroReserva);
+    });
+
+    if (it != reservas.end()) {
+        // Elimina la reserva si se encuentra
+        reservas.erase(it);
+        cout << "Reserva cancelada exitosamente." << endl;
+    } else {
+        cout << "Numero de reserva no encontrado. Verifique e intente nuevamente." << endl;
+    }
+}
+
+// Función para que el usuario modifique una reserva
+void modificarReserva(vector<Reserva>& reservas) {
+    int numeroReserva;
+    cout << "Ingrese el numero de reserva que desea modificar: ";
+    cin >> numeroReserva;
+
+    auto it = find_if(reservas.begin(), reservas.end(), [numeroReserva](const Reserva& r) {
+        return r.numeroReserva == to_string(numeroReserva);
+    });
+
+    if (it != reservas.end()) {
+        // Muestra los detalles actuales de la reserva
+        cout << "Detalles actuales de la reserva:" << endl;
+        cout << "Fecha: " << it->fecha << " -- Hora: " << it->hora << " -- Mesa: #" << it->mesaAsignada
+             << " -- Personas: " << it->numPersonas << " -- Nombre: " << it->nombreCliente << " -- Correo: " << it->correoCliente << endl;
+
+        // Pide al usuario los nuevos detalles
+        string nuevaFecha, nuevaHora, nuevoNombre, nuevoCorreo;
+        int nuevaNumPersonas;
+
+        cin.ignore();  // Ignora el carácter de nueva línea después de leer numeroReserva
+
+        cout << "Ingrese la nueva fecha (o enter para mantener la actual): ";
+        getline(cin, nuevaFecha);
+        if (nuevaFecha.empty()) {
+            nuevaFecha = it->fecha;
+        }
+
+        cout << "Ingrese la nueva hora (o enter para mantener la actual): ";
+        getline(cin, nuevaHora);
+        if (nuevaHora.empty()) {
+            nuevaHora = it->hora;
+        }
+
+        // Validación y entrada del nuevo número de personas
+        do {
+            cout << "Ingrese el nuevo numero de personas (de 1 a 8, 0 para mantener el actual): ";
+            cin >> nuevaNumPersonas;
+            if (nuevaNumPersonas < 0 || nuevaNumPersonas > 8) {
+                cout << "Error: El numero de personas debe estar entre 1 y 8. Intenta nuevamente." << endl;
+            }
+        } while (nuevaNumPersonas < 0 || nuevaNumPersonas > 8);
+
+        if (nuevaNumPersonas == 0) {
+            nuevaNumPersonas = it->numPersonas;
+        }
+
+        cin.ignore();  // Limpiar el buffer después de leer el número de personas
+
+        cout << "Ingrese el nuevo nombre (o enter para mantener el actual): ";
+        getline(cin, nuevoNombre);
+        if (nuevoNombre.empty()) {
+            nuevoNombre = it->nombreCliente;
+        }
+
+        cout << "Ingrese el nuevo correo (o enter para mantener el actual): ";
+        getline(cin, nuevoCorreo);
+        if (nuevoCorreo.empty()) {
+            nuevoCorreo = it->correoCliente;
+        }
+
+        // Actualiza la reserva con los nuevos detalles
+        it->fecha = nuevaFecha;
+        it->hora = nuevaHora;
+        it->numPersonas = nuevaNumPersonas;
+        it->nombreCliente = nuevoNombre;
+        it->correoCliente = nuevoCorreo;
+
+        cout << "Reserva modificada exitosamente." << endl;
+    } else {
+        cout << "Numero de reserva no encontrado. Verifique e intente nuevamente." << endl;
+    }
+}
+
 //función para generar los archivos de reservas y los de reseñas
 void generarArchivos(const vector<Reserva>& reservas) {
     ofstream archivo("reservas_y_comentarios.txt");
@@ -300,6 +395,34 @@ void resenia()
         }    
 }
 
+// Función para recomendar un plato aleatorio
+void recomendacionPlatos() {
+    // Inicializar la semilla para la generación de números aleatorios
+    srand(time(0));
+
+    // Lista de platos
+    string platos[] = {"Pasta", "Carne asada", "Hamburguesa doble carne", "Ensalada de pollo", "Sushi"};
+
+    // Elegir aleatoriamente un plato
+    int indiceAleatorio = rand() % 5; // 5 es el número de platos en la lista
+    string platoRecomendado = platos[indiceAleatorio];
+
+    int confirmacion;
+    cout << "La recomendacion del dia es: " << platoRecomendado << endl;
+    cout << "Esta seguro de elegir este plato? (1: SI, 0: NO)\n";
+    cin >> confirmacion;
+
+    if (confirmacion == 1) {
+        cout << "Se ha confirmado su pedido." << endl;
+    }
+    
+     else {
+        cout << "Vuelva a elegir una opcion, por favor." << endl;
+        system("cls"); 
+    }
+    
+} 
+
 // Función para realizar un log de acciones
 void registrarAccion(const string& mensaje) {
     ofstream logFile("log.txt", ios::app); // Abre el archivo de log en modo de agregar
@@ -412,7 +535,7 @@ int main() {
                                 break;
                             case 6:
                                 cout << "Modificacion de reserva por peticion del usuario" << endl;
-                                //modificarReserva(reservas);
+                                modificarReserva(reservas);
                                 registrarAccion("Se ha modificado una reserva.");
                                 break; 
 
@@ -450,15 +573,15 @@ int main() {
                 break;
             case 6:
                 cout<<"--------Recomendacion de platos--------\n";
-                //recomendacionPlatos();
+                recomendacionPlatos();
                 registrarAccion("Se ha consultado la recomendación de platos.");
                 break;   
             case 7:
-                //cancelarReserva(reservas);
+                cancelarReserva(reservas);
                 registrarAccion("Se ha cancelado una reserva.");
                 break;   
             case 8:
-                //modificarReserva(reservas);
+                modificarReserva(reservas);
                 registrarAccion("Se ha modificado una reserva.");
                 break;   
             case 9:
