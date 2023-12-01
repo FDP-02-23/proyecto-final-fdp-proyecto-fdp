@@ -7,6 +7,12 @@
 
 using namespace std;
 
+// Función para generar un número de reserva aleatorio
+int generarNumeroReserva() {
+    return rand() % 10000 + 1000;  // Números aleatorios entre 1000 y 9999
+}
+
+
 //struct para representar una mesa
 struct Mesa {
     int numero;
@@ -113,12 +119,13 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
                 mesa.reservada = true;
                 mesa.ocupadaPor = nombre; //asigna el nombre del cliente a la mesa
 
-                //crea una nueva reserva con los detalles proporcionados 
-                Reserva nuevaReserva = {fecha, hora, numPersonas, mesa.numero, nombre, correo; //convierte el numero de reserva a su representación como string
+                //crea una nueva reserva con los detalles proporcionados y asignar un numero de reserva aleatorio
+                Reserva nuevaReserva = {fecha, hora, numPersonas, mesa.numero, nombre, correo}; //convierte el numero de reserva a su representación como string
                 //agrega la nueva reserva al vector de reservas
                 reservas.push_back(nuevaReserva);
 
                 cout << "Reserva exitosa para la Mesa #" << mesa.numero << endl;
+                cout << "Reserva exitosa! Su numero de reserva es: " << nuevaReserva.numeroReserva << endl;
 
                 return;
             }
@@ -279,5 +286,3 @@ int main() {
 
     return 0;
 } 
-    return 0;
-}  
