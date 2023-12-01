@@ -7,12 +7,10 @@
 
 using namespace std;
 
-
 // Función para generar un número de reserva aleatorio
 int generarNumeroReserva() {
     return rand() % 10000 + 1000;  // Números aleatorios entre 1000 y 9999
 }
-
 
 //struct para representar una mesa
 struct Mesa {
@@ -44,35 +42,33 @@ void mostrarMesasDisponibles(const vector<Mesa>& mesas, int numPersonas) {
     }
 }
 
-// función para realizar una reserva
+//funcion para realizar una reserva
 void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     string fecha, hora, nombre, correo;
     int numPersonas;
 
-    //obteniene la hora actual del sistema
-    time_t now = time(0);
-    tm* localTime = localtime(&now);
+    time_t now = time(0); //obtiene la hora actual en segundos
+    tm* localTime = localtime(&now); //convierte la hora actual a una estructura de tiempo
 
-    //convierte la hora actual a un formato legible y la almacena en la variable currentHour
+
     char currentTime[9];
-    strftime(currentTime, 9, "%H:%M:%S", localTime);
+    strftime(currentTime, 9, "%H:%M:%S", localTime); //formatea la hora actual
+
     string currentHour(currentTime);
 
     char opcionDia;
     cout << "Desea hacer la reserva para hoy (H) o para un dia futuro (F)?: ";
     cin >> opcionDia;
-    system("cls");
 
     if (opcionDia == 'H' || opcionDia == 'h') {
-        //si la hora actual es igual o mayor a las 08:00:00, ajustar la hora a 08:00
-        if (currentHour >= "08:00:00") {
+        if (currentHour >= "08:00:00") { //comprueba si es después de las 8:00 AM
             currentHour = "08:00";
         }
         fecha = "hoy";
     } else if (opcionDia == 'F' || opcionDia == 'f') {
         cout << "Ingrese la fecha: ";
         cin >> fecha;
-        currentHour = "08:00";
+        currentHour = "08:00";  //reinicia la hora para futuras reservas a las 8:00 AM
     } else {
         cout << "Opcion no valida. Seleccione 'H' para hoy o 'F' para un dia futuro." << endl;
         return;
@@ -82,7 +78,7 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
     cout << "Ingrese la hora (HH:MM): ";
     cin >> hora;
 
-    //verifica que la hora ingresada sea válida
+    //comprueba que la hora sea válida
     if (hora != "08:00" && hora != "11:00" && hora != "13:00" && hora != "15:00" && hora != "17:00" && hora != "19:00") {
         cout << "Las reservas solo se permiten en horarios ya especificados." << endl;
         return;
@@ -121,7 +117,7 @@ void hacerReserva(vector<Mesa>& mesas, vector<Reserva>& reservas) {
                 mesa.ocupadaPor = nombre; //asigna el nombre del cliente a la mesa
 
                 //crea una nueva reserva con los detalles proporcionados y asignar un numero de reserva aleatorio
-                Reserva nuevaReserva = {fecha, hora, numPersonas, mesa.numero, nombre, correo}; //convierte el numero de reserva a su representación como string
+                Reserva nuevaReserva = {fecha, hora, numPersonas, mesa.numero, nombre, correo, to_string(generarNumeroReserva())}; //convierte el numero de reserva a su representación como string
                 //agrega la nueva reserva al vector de reservas
                 reservas.push_back(nuevaReserva);
 
@@ -159,33 +155,152 @@ void mostrarMesasOcupadas(const vector<Mesa>& mesas) {
     }
 }
 
-//funcion para limpiar la info de los vectores de reservas y reseñas
-void eliminarReservasYResenas(vector<Reserva>& reservas) {
-// Limpiar el vector de reservas
+//función para limpiar la información de los vectores de reservas, opc solo para administrador
+void eliminarReservas(vector<Reserva>& reservas) {
+    //limpia el vector de reservas
     reservas.clear();
-    cout << "Todas las reservas y reseñas han sido eliminadas." << endl;
+    cout << "Todas las reservas han sido eliminadas." << endl;
 }
 
-//funcion para generar los archivos de reservas y los de reseñas
+//función para generar los archivos de reservas y los de reseñas
 void generarArchivos(const vector<Reserva>& reservas) {
     ofstream archivo("reservas_y_comentarios.txt");
 
     if (archivo.is_open()) {
         for (const Reserva& reserva : reservas) {
-            // Escribe la información en el archivo
+            //escribe la información en el archivo
             archivo << "Fecha: " << reserva.fecha << " -- Hora: " << reserva.hora << " -- Mesa: #" << reserva.mesaAsignada
                     << " -- Personas: " << reserva.numPersonas << " -- Nombre: " << reserva.nombreCliente << " -- Correo: " << reserva.correoCliente << endl;
         }
 
         archivo.close();
-        cout << "Archivo generado exitosamente: reservas_y_comentarios.txt" << endl;
+        cout << "Archivo generado exitosamente: reservas.txt" << endl;
     } else {
         cout << "Error al abrir el archivo." << endl;
     }
 }
 
-int main() {
+//Funcion para que el usuario deje un comentario
+void comentariosUsuario(){
+string comentario,nombreCliente,apellido_cliente;
+int opcion;
 
+cin.ignore();//ignorara el bufer antes de usar el getline
+cout<<"Ingrese su nombres por favor: \n";
+getline(cin, nombreCliente);//guardara los nombres de los usuarios
+cout<<"Ingrese su apellidos por favor: \n";
+getline(cin, apellido_cliente);//guardara los dos apellidos del usuario 
+cout<<"Esrcribra su comentario por favor y presione ENTER cuando termine: \n";
+getline(cin, comentario);//guardara toda la reseña del usuario.
+cout<<"Esta seguro de dejar este comentario? (1: SI, 0: NO)\n";
+cin>>opcion;
+system("cls");
+
+if (opcion == 1) {
+        cout << "Muchas gracias por brindarnos sus comentarios. Los tomaremos en cuenta para mejorar la experiencia.\n";
+
+        // Guardar el comentario en un archivo
+        ofstream archivo_comentarios("comentarios.txt", ios::app); // Crea el archivo a nombre de comentarios.txt
+        if (archivo_comentarios.is_open())//abre el archivo y comienza a capturar los datos
+        {
+            archivo_comentarios << "Nombres del cliente: " << nombreCliente << "\nApellidos del cliente: "<<apellido_cliente <<"\nComentario: " << comentario << "\n";
+            archivo_comentarios << "\n";
+            archivo_comentarios.close();//cierra el archivo y deja de capturar los datos
+        } else {
+            cout << "No se pudo abrir el archivo para guardar el comentario.\n";
+        }
+    }
+}
+
+//Funcion para ver las reseñas
+void verResenias(){
+    ifstream archivo_comentarios("comentarios.txt");
+    string linea;
+
+    if (archivo_comentarios.is_open()) {
+        while (getline(archivo_comentarios, linea)) {
+            cout << linea << endl;
+        }
+        archivo_comentarios.close();
+    } else {
+        cout << "No se pudo abrir el archivo de resenias." << endl;
+    }
+
+}
+
+//funcion que nos permitira ver las calificaciones de estrellas de los usuarios 
+void verCalificaciones() {
+    ifstream archivo_calificaciones("registro_de_estrellas.txt");
+    string linea;
+
+    if (archivo_calificaciones.is_open()) {
+        cout << "Calificaciones de estrellas recibidas:" << endl;
+        while (getline(archivo_calificaciones, linea)) {
+            cout << linea << endl;
+        }
+        archivo_calificaciones.close();
+    } else {
+        cout << "No se pudo abrir el archivo de calificaciones." << endl;
+    }
+}
+
+//Funcion para escribir una reseña
+void resenia()
+{
+    int  estrellas;
+    string nombre,apellidos;
+
+    cin.ignore();
+    cout<<"Ingrese sus nombres\n";
+    getline(cin, nombre);
+    cout<<"Ingrese sus apellidos\n";
+    getline(cin, apellidos);
+
+    ofstream archivo("registro_de_estrellas.txt", ios::app); // crea el archivo
+    if (archivo.is_open())//abre el archivo y comienza a capturar los datos
+    {
+        do
+        {
+        cout<<"Califique nuestros servicios del 1 al 5, siendo 5 la maxima nota: \n";
+        cout<<"Su calificacion es: ";
+        cin>>estrellas;
+        system("cls");
+
+        if (estrellas >= 1 && estrellas <= 5)
+        {
+            
+            cout << "Nombres del cliente: " << nombre << "\n";
+            cout << "Apellidos del cliente: " << apellidos << "\n";
+            cout << "Numero de estrellas que puso el cliente: ";
+
+            for (int i = 0; i < estrellas; i++)
+            {
+                cout<<"*";
+            }
+            cout<<"\n";
+
+            //escribe la información en el archivo
+            archivo<<"Nombre del cliente: " << nombre << "\n";
+            archivo<<"Apellidos del cliente: " << apellidos << "\n";
+            archivo<<"Numero de estrellas que puso el cliente: ";
+            for (int i = 0; i < estrellas; i++)
+            {
+                archivo << "*";
+            }
+            archivo<<"\n";
+            archivo<<"\n";
+        }
+        else
+            cout<<"Ponga un numero dentro del rango por favor\n";
+    } while (estrellas < 1 || estrellas > 5);//se ocupara un do while por si el usuario ingresa un numero fuera del rango que  el programa le volvera a solicitar el numero
+
+    archivo.close(); // cierra el archivo
+        }else {
+            cout<<"No se pudo abrir el archivo para guardar el comentario.\n";
+        }    
+}
+
+int main() {
     vector<Mesa> mesas = { 
         {1, 4, false},
         {2, 6, false},
@@ -211,79 +326,118 @@ int main() {
 
     vector<Reserva> reservas; //inicializa el vector de reservas
 
-
     string empleadoPassword = "1234";  //contraseña de empleado que se pide al ingresar al menu de admin
 
     while (true) {
         int opcion;
-        cout << "Bienvenido a X!" << endl;
+        cout << "Bienvenido a Sabor Celestial!" << endl;
         cout << "Menu principal:" << endl;
-        cout << "1. Hacer una reserva" << endl;
-        cout << "2. Menu de administrador" << endl;
+        cout << "1. Menu de administrador" << endl;
+        cout << "2. Hacer una reserva" << endl;
         cout << "3. Ver horarios de servicio" << endl;
-        cout << "4. Salir" << endl;
+        cout << "4. Dejar un comentario sobre nustros servicios \n";
+        cout << "5. Calificar nuestros servicio \n";
+        cout << "6. Recomendacion de platos \n";
+        cout << "7. Cancelar una reserva" << endl;
+        cout << "8. Modificar una reserva" << endl;
+        cout << "9. Ver calificaciones de estrellas" << endl;
+        cout << "10. Salir" << endl;
+
         cout << "Seleccione una opcion: ";
         cin >> opcion;
+        system ("cls");
 
-    string inputPassword;
+        string inputPassword;
 
         switch (opcion) {
             case 1:
-                hacerReserva(mesas, reservas);
-                break;
-            case 2: {
                 cout << "Ingrese la contrasena de empleado: ";
                 cin >> inputPassword;
+                system("cls");
 
                 if (inputPassword == empleadoPassword) {
                     int opcionAdmin;
-                    cout << "Menu de administrador:" << endl;
-                    cout << "1. Ver reservas hechas" << endl;
-                    cout << "2. Ver resenas hechas" << endl;
-                    cout << "3. Ver mesas ocupadas" << endl;
-                    cout << "4. Eliminar reservas y/o resenas" << endl;
-                    cout << "5. Generar archivos con las reservas y resenas hechas" << endl;
-                    cout << "6. Regresar al menu principal" << endl;
-                    cout << "Seleccione una opcion: ";
-                    cin >> opcionAdmin;
+                    do {
+                        cout << "Menu de administrador:" << endl;
+                        cout << "1. Ver reservas hechas" << endl;
+                        cout << "2. Ver resenas hechas" << endl;
+                        cout << "3. Ver mesas ocupadas" << endl;
+                        cout << "4. Eliminar reservas" << endl;
+                        cout << "5. Generar archivos con las reservas hechas" << endl;
+                        cout << "6. Modificar reserva en caso que el usuario lo pida." << endl;
+                        cout << "7. Regresar al menu principal" << endl;
+                        cout << "Seleccione una opcion: ";
+                        cin >> opcionAdmin;
+                        system("cls");
 
-                    switch (opcionAdmin) {
-        case 1: 
-            verReservas(reservas);
-            break;
-        case 2:
-            //verResenas(reservas);
-            break;
-        case 3:
-            mostrarMesasOcupadas(mesas);
-            break;
-        case 4:
-            eliminarReservasYResenas(reservas);
-            break;
-        case 5:
-            generarArchivos(reservas);
-            break;
-        case 6:
-            cout << "Regresando al menu principal" << endl;
-            break; 
-        default:
-            cout << "Opcion no valida en el menu de administrador." << endl;
-            break;
-        }
-        break;
-    }
+                        switch (opcionAdmin) {
+                            case 1: 
+                                verReservas(reservas);
+                                 break;
+                            case 2:
+                                verResenias();
+                                break;
+                            case 3:
+                                mostrarMesasOcupadas(mesas);
+                                break;
+                            case 4:
+                                eliminarReservas(reservas);
+                                break;
+                            case 5:
+                                generarArchivos(reservas);
+                                break;
+                            case 6:
+                                //modificarReserva(reservas);
+                                break; 
+
+                            case 7:
+                                cout << "Regresando al menu principal" << endl;
+                                break;    
+                            default:
+                                cout << "Opcion no valida en el menu de administrador." << endl;
+                                break;
+                        }
+                    } while (opcionAdmin != 6); 
+                } else {
+                    cout << "Contrasenia equivocada \n";
+                }
+                break;
+            case 2: {
+                hacerReserva(mesas, reservas);
+                break;
+            }
             case 3:
                 cout << "Horarios de servicio: 08:00, 11:00, 13:00, 15:00, 17:00, 19:00" << endl;
                 break;
             case 4:
+                cout<<"--------Esta en el apartado de comentarios--------\n";
+                comentariosUsuario();
+                break;
+            case 5:
+                cout<<"--------Calificar nuestros servicios--------\n";
+                resenia();
+                break;
+            case 6:
+                cout<<"--------Recomendacion de platos--------\n";
+                //recomendacionPlatos();
+                break;   
+            case 7:
+                //cancelarReserva(reservas);
+                break;   
+            case 8:
+                //modificarReserva(reservas);
+                break;   
+            case 9:
+                verCalificaciones();
+                break;
+            case 10:
                 cout << "Gracias por visitarnos. Hasta luego." << endl;
                 return 0;
             default:
-                cout << "Por favor, seleccione una opción válida." << endl;
+                cout << "Por favor, seleccione una opcion valida." << endl;
                 break;
         }
     }
-}
 
-    return 0;
-} 
+    return 0;
+}
