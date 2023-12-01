@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 // Función para generar un número de reserva aleatorio
 int generarNumeroReserva() {
     return rand() % 10000 + 1000;  // Números aleatorios entre 1000 y 9999
