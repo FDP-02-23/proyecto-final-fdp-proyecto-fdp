@@ -110,6 +110,8 @@ void modificarReserva(vector<Reserva>& reservas) {
 void recomendacionPlatos() {
     srand(time(0));
 
+    
+
     // Lista de platos
     string platos[] = {"Espagueti", "Carne asada", "Hamburguesa doble carne", "Ensalada de pollo", "Sushi"};
 
