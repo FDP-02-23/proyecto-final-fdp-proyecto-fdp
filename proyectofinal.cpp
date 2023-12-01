@@ -542,12 +542,13 @@ int main() {
                             case 7:
                                 cout << "Regresando al menu principal" << endl;
                                 registrarAccion("El administrador ha regresado al menu principal.");
-                                break;    
+                                break;
+                                    
                             default:
                                 cout << "Opcion no valida en el menu de administrador." << endl;
                                 break;
                         }
-                    } while (opcionAdmin != 6); 
+                    } while (opcionAdmin != 7); 
                 } else {
                     cout << "Contrasenia equivocada \n";
                 }
